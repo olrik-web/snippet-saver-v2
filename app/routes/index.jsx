@@ -2,11 +2,23 @@ import { Link } from "@remix-run/react";
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix</h1>
+    <div>
+      <h1 className="text-3xl font-bold">Welcome to Remix</h1>
       <ul>
         <li>
-          <Link to="/about">About me</Link>
+          <Link className="text-blue-600 underline" to="/about">
+            About Save Snip
+          </Link>
+        </li>
+        <li>
+          <Link className="text-blue-600 underline" to="/snippets">
+            Snippets
+          </Link>
+        </li>
+        <li>
+          <Link className="text-blue-600 underline" to="/profile">
+            Profile
+          </Link>
         </li>
       </ul>
     </div>
