@@ -18,22 +18,19 @@ export const loader = async () => {
   });
 };
 
-export default function Index() {
+export default function SnippetIndex() {
   const { snippets } = useLoaderData();
   return (
     <div>
       <h2 className="text-2xl">All snippets</h2>
       <ul>
-        {snippets.map((snip) => {
-          console.log(snip.id);
-          return (
-            <li key={snip.id}>
-              <Link to={snip.id} className="text-blue-600 underline">
-                {snip.title}
-              </Link>
-            </li>
-          );
-        })}
+        {snippets.map((snip) => (
+          <li key={snip.id}>
+            <Link to={snip.id.toString()} className="text-blue-600 underline">
+              {snip.title}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );
