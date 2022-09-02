@@ -1,3 +1,5 @@
+import styles from "./styles/app.css";
+
 const {
   Links,
   LiveReload,
@@ -9,9 +11,13 @@ const {
 
 export const meta = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Snip Elephant",
   viewport: "width=device-width,initial-scale=1",
 });
+
+export function links() {
+  return [{ rel: "stylesheet", href: styles }];
+}
 
 export default function App() {
   return (
