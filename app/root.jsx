@@ -11,7 +11,7 @@ const {
 
 export const meta = () => ({
   charset: "utf-8",
-  title: "Save Snip",
+  title: "Snip Elephant",
   viewport: "width=device-width,initial-scale=1",
 });
 

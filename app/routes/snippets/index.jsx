@@ -3,14 +3,14 @@ import { json } from "@remix-run/node";
 
 export const loader = async () => {
   return json({
-    posts: [
+    snippets: [
       {
-        slug: "my-first-snip-save",
+        id: 1,
         title: "My First Snip Save",
         desc: "",
       },
       {
-        slug: "tailwind-config",
+        id: 2,
         title: "Tailwind.config.js file",
         desc: "",
       },
@@ -18,32 +18,22 @@ export const loader = async () => {
   });
 };
 
-export default function Snippets() {
-    const { posts } = useLoaderData();
+export default function Index() {
+  const { snippets } = useLoaderData();
   return (
     <div>
-      <h1 className="text-3xl font-bold">Snippets</h1>
-      <ul>
-        <li>
-          <Link className="text-blue-600 underline" to="/">
-            Back
-          </Link>
-        </li>
-        <li>
-          <Link className="text-blue-600 underline" to="./create">
-            Create
-          </Link>
-        </li>
-      </ul>
       <h2 className="text-2xl">All snippets</h2>
       <ul>
-        {posts.map((post) => (
-          <li key={post.slug}>
-            <Link to={post.slug} className="text-blue-600 underline">
-              {post.title}
-            </Link>
-          </li>
-        ))}
+        {snippets.map((snip) => {
+          console.log(snip.id);
+          return (
+            <li key={snip.id}>
+              <Link to={snip.id} className="text-blue-600 underline">
+                {snip.title}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
