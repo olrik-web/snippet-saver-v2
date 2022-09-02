@@ -5,14 +5,7 @@ export default function About() {
   return (
     <div>
       <Navbar />
-      <h1 className="text-3xl font-bold">About Save Snip</h1>
-      <ul>
-        <li>
-          <Link className="text-blue-600 underline" to="/">
-            Back
-          </Link>
-        </li>
-      </ul>
+      <h1 className="text-3xl font-bold text-center m-4">About Snip Elephant</h1>
     </div>
   );
 }

@@ -1,13 +1,12 @@
-import { useParams } from "@remix-run/react";
+import { Link, useParams } from "@remix-run/react";
 
 export default function Details() {
-  const {snippetId} = useParams();
+  const { snippetId } = useParams();
   return (
     <section>
       <h1 className="text-3xl font-bold">Details page {snippetId}</h1>
-      <code>
-        
-      </code>
+      <code></code>
+      <Link to="edit">Edit</Link>
     </section>
   );
 }

@@ -16,7 +16,7 @@ export default function Index() {
             code you find across the Web and quickly access it on all devices
           </p>
           <p className="pt-8">Get started for free</p>
-          <Link to="/" className="bg-yellow-400 rounded-xl py-3 px-8">
+          <Link to="/signup" className="bg-yellow-400 rounded-xl py-3 px-8">
             Sign up
           </Link>
         </div>
