@@ -58,7 +58,9 @@ export default function Navbar() {
             <li>
               <NavLink
                 to="/"
-                className={({ isActive }) => (isActive ? classActive : classNotActive)}
+                className={({ isActive }) =>
+                  isActive ? classActive : classNotActive
+                }
               >
                 Home
               </NavLink>
@@ -66,7 +68,9 @@ export default function Navbar() {
             <li>
               <NavLink
                 to="/about"
-                className={({ isActive }) => (isActive ? classActive : classNotActive)}
+                className={({ isActive }) =>
+                  isActive ? classActive : classNotActive
+                }
               >
                 About
               </NavLink>
@@ -74,7 +78,9 @@ export default function Navbar() {
             <li>
               <NavLink
                 to="/snippets"
-                className={({ isActive }) => (isActive ? classActive : classNotActive)}
+                className={({ isActive }) =>
+                  isActive ? classActive : classNotActive
+                }
               >
                 Snippets
               </NavLink>
@@ -82,9 +88,31 @@ export default function Navbar() {
             <li>
               <NavLink
                 to="/profile"
-                className={({ isActive }) => (isActive ? classActive : classNotActive)}
+                className={({ isActive }) =>
+                  isActive ? classActive : classNotActive
+                }
               >
                 Profile
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  isActive ? classActive : classNotActive
+                }
+              >
+                Login
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/signup"
+                className={({ isActive }) =>
+                  isActive ? classActive : classNotActive
+                }
+              >
+                Sign up
               </NavLink>
             </li>
           </ul>
