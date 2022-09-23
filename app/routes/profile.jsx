@@ -16,8 +16,8 @@ export default function Profile() {
     <div>
       <Navbar />
       <h1 className="text-3xl font-bold text-center m-4">Profile</h1>
-      {user.map((movie) => {
-        return <li key={movie._id}>{movie.email}</li>;
+      {user.map((u) => {
+        return <li key={u._id}>{u.email}</li>;
       })}
     </div>
   );

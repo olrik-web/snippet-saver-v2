@@ -1,9 +1,11 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import data from "~/data.json";
+import connectDb from "~/db/connectDb.server";
 
 export const loader = async () => {
-  return json(data);
+ const db = await connectDb();
+ const snippets = await db.models.Snippet.find();
+ return json(snippets);
 };
 
 export default function SnippetIndex() {
@@ -13,8 +15,8 @@ export default function SnippetIndex() {
       <h2 className="text-2xl">All snippets</h2>
       <ul>
         {snippets.map((snippet) => (
-          <li key={snippet.id}>
-            <Link to={snippet.id.toString()} className="text-blue-600 underline">
+          <li key={snippet._id}>
+            <Link to={snippet._id.toString()} className="text-blue-600 underline">
               {snippet.title}
             </Link>
           </li>

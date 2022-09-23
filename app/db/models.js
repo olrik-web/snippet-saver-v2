@@ -10,7 +10,7 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, "Please provide a password."]
+    required: [true, "Please provide a password."],
   },
   profile: {
     firstName: {
@@ -30,10 +30,33 @@ const userSchema = new Schema({
   },
 });
 
+const snippetSchema = new Schema({
+  title: {
+    type: String,
+    required: [true, "Please provide a title."],
+  },
+  desc: {
+    type: String,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 export const models = [
   {
     name: "User",
     schema: userSchema,
     collection: "User",
+  },
+  {
+    name: "Snippet",
+    schema: snippetSchema,
+    collection: "Snippet",
   },
 ];

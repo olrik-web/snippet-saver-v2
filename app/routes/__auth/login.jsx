@@ -1,8 +1,13 @@
 import { json, redirect } from "@remix-run/node";
-import { useActionData } from "@remix-run/react";
-import { useState } from "react";
+import { Form, useActionData } from "@remix-run/react";
+import { useEffect, useRef, useState } from "react";
 import FormField from "~/components/FormField";
 import { getUser, register } from "~/utils/auth.server";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "~/utils/validators.server";
 
 export const loader = async ({ request }) => {
   // If there's already a user in the session, redirect to the home page
@@ -17,20 +22,28 @@ export async function action({ request }) {
   const firstName = form.get("firstName");
   const lastName = form.get("lastName");
 
-  // if (
-  //   typeof action !== "string" ||
-  //   typeof email !== "string" ||
-  //   typeof password !== "string"
-  // ) {
-  //   return json({ error: `Invalid Form Data`, form: action }, { status: 400 });
-  // }
+  const errors = {
+    email: validateEmail(email),
+    password: validatePassword(password),
+    ...(action === "register"
+      ? {
+          firstName: validateName(firstName || ""),
+          lastName: validateName(lastName || ""),
+        }
+      : {}),
+  };
 
-  // if (
-  //   action === "register" &&
-  //   (typeof firstName !== "string" || typeof lastName !== "string")
-  // ) {
-  //   return json({ error: `Invalid Form Data`, form: action }, { status: 400 });
-  // }
+  if (Object.values(errors).some(Boolean)) {
+    console.log("HERE");
+    return json(
+      {
+        errors,
+        fields: { email, password, firstName, lastName },
+        form: action,
+      },
+      { status: 400 }
+    );
+  }
 
   switch (action) {
     // case "login": {
@@ -48,6 +61,10 @@ export default function Login() {
   const [action, setAction] = useState("login");
   const actionData = useActionData();
 
+  const firstLoad = useRef(true);
+  const [errors, setErrors] = useState(actionData?.errors || {});
+  const [formError, setFormError] = useState(actionData?.error || "");
+
   const [formData, setFormData] = useState({
     email: actionData?.fields?.email || "",
     password: actionData?.fields?.password || "",
@@ -58,6 +75,30 @@ export default function Login() {
   const handleInputChange = (event, field) => {
     setFormData((form) => ({ ...form, [field]: event.target.value }));
   };
+
+  useEffect(() => {
+    if (!firstLoad.current) {
+      const newState = {
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+      };
+      setErrors(newState);
+      setFormError("");
+      setFormData(newState);
+    }
+  }, [action]);
+
+  useEffect(() => {
+    if (!firstLoad.current) {
+      setFormError("");
+    }
+  }, [formData]);
+
+  useEffect(() => {
+    firstLoad.current = false;
+  }, []);
 
   return (
     <div>
@@ -76,16 +117,16 @@ export default function Login() {
           ? "Log In To Start Snipping!"
           : "Sign Up To Get Started!"}
       </p>
-      <form method="POST" className="rounded-2xl bg-gray-200 p-6 w-96">
+      <Form method="POST" className="rounded-2xl bg-gray-200 p-6 w-96">
         <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">
-          {/* {formError} */}
+          {formError}
         </div>
         <FormField
           htmlFor="email"
           label="Email"
           value={formData.email}
           onChange={(e) => handleInputChange(e, "email")}
-          // error={errors?.email}
+          error={errors?.email}
         />
         <FormField
           htmlFor="password"
@@ -93,7 +134,7 @@ export default function Login() {
           label="Password"
           value={formData.password}
           onChange={(e) => handleInputChange(e, "password")}
-          // error={errors?.password}
+          error={errors?.password}
         />
         {action === "register" && (
           <>
@@ -102,14 +143,14 @@ export default function Login() {
               label="First Name"
               onChange={(e) => handleInputChange(e, "firstName")}
               value={formData.firstName}
-              // error={errors?.firstName}
+              error={errors?.firstName}
             />
             <FormField
               htmlFor="lastName"
               label="Last Name"
               onChange={(e) => handleInputChange(e, "lastName")}
               value={formData.lastName}
-              // error={errors?.lastName}
+              error={errors?.lastName}
             />
           </>
         )}
@@ -123,7 +164,7 @@ export default function Login() {
             {action === "login" ? "Sign In" : "Sign Up"}
           </button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 }
