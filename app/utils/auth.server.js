@@ -43,8 +43,8 @@ export async function register({ email, password, firstName, lastName }) {
       {
         error: "Something went wrong trying to create a new user.",
         fields: { email: email, password: password },
+        status: 400 
       },
-      { status: 400 }
     );
   }
 
