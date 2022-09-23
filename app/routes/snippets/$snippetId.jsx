@@ -1,10 +1,12 @@
 import { json } from "@remix-run/node";
 import { Link, useLoaderData, useParams } from "@remix-run/react";
 import data from "~/data.json";
+import connectDb from "~/db/connectDb.server";
 
-export function loader({ params, request }) {
-  const snippet = data.find((snippet) => snippet.id == params.snippetId);
-  return json(snippet);
+export async function loader({ params, request }) {
+  const db = await connectDb();
+  const snippets = await db.models.Snippet.findById(params.snippetId);
+  return json(snippets);
 }
 
 export default function Details() {

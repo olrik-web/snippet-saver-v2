@@ -1,10 +1,29 @@
-import { Link, NavLink } from "@remix-run/react";
-import { useState } from "react";
+import { redirect } from "@remix-run/node";
+import { Link, NavLink, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { getUser } from "~/utils/auth.server";
 import logo from "../images/dall-e-elephant.png";
 
-export default function Navbar() {
+// Loader doesn't work outside routes
+/*
+export const loader = async ({ request }) => {
+  const user = await getUser(request);
+  return user ? true : false;
+};
+*/
+export default function Navbar({ request }) {
   const [clicked, setClicked] = useState(false);
 
+  // I can't really use {request} here, I think. How do I get the user using cookie?
+  /*
+  useEffect(() => {
+    async function getCurrentUser() {
+      const result = await getUser(request);
+      console.log(result);
+    }
+    getCurrentUser();
+  }, [request]);
+*/
   const classActive =
     "block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white";
   const classNotActive =
@@ -103,16 +122,6 @@ export default function Navbar() {
                 }
               >
                 Login
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/signup"
-                className={({ isActive }) =>
-                  isActive ? classActive : classNotActive
-                }
-              >
-                Sign up
               </NavLink>
             </li>
           </ul>

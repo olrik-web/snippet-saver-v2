@@ -1,6 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import data from "~/data.json";
+import connectDb from "~/db/connectDb.server";
 
 export async function action({ request }) {
   const body = await request.formData();
@@ -18,9 +19,10 @@ export async function action({ request }) {
 //   return null;
 // }
 
-export function loader({ params, request }) {
-  const snippet = data.find((snippet) => snippet.id == params.snippetId);
-  return json(snippet);
+export async function loader({ params, request }) {
+  const db = await connectDb();
+  const snippets = await db.models.Snippet.findById(params.snippetId);
+  return json(snippets);
 }
 
 export default function Edit() {
@@ -47,7 +49,7 @@ export default function Edit() {
           <button type="submit">Update</button>
         </Form>
         <code></code>
-        <Link to={`../${snippet.id}`}>Cancel</Link>
+        <Link to={`../${snippet._id}`}>Cancel</Link>
       </article>
     </section>
   );
