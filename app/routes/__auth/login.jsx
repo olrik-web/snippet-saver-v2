@@ -2,17 +2,17 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import FormField from "~/components/FormField";
-import { getUser, register } from "~/utils/auth.server";
+import { getUser, logIn, register } from "~/utils/auth.server";
 import {
   validateEmail,
   validateName,
   validatePassword,
 } from "~/utils/validators.server";
 
-export const loader = async ({ request }) => {
-  // If there's already a user in the session, redirect to the home page
-  return (await getUser(request)) ? redirect("/") : null;
-};
+// export const loader = async ({ request }) => {
+//   // If there's already a user in the session, redirect to the home page
+//   return (await getUser(request)) ? redirect("/") : null;
+// };
 
 export async function action({ request }) {
   const form = await request.formData();
@@ -34,7 +34,6 @@ export async function action({ request }) {
   };
 
   if (Object.values(errors).some(Boolean)) {
-    console.log("HERE");
     return json(
       {
         errors,
@@ -46,9 +45,9 @@ export async function action({ request }) {
   }
 
   switch (action) {
-    // case "login": {
-    //   return await login({ email, password });
-    // }
+    case "login": {
+      return await logIn({ email, password });
+    }
     case "register": {
       return await register({ email, password, firstName, lastName });
     }
@@ -61,10 +60,12 @@ export default function Login() {
   const [action, setAction] = useState("login");
   const actionData = useActionData();
 
+  console.log(actionData);
+
   const firstLoad = useRef(true);
   const [errors, setErrors] = useState(actionData?.errors || {});
   const [formError, setFormError] = useState(actionData?.error || "");
-
+  
   const [formData, setFormData] = useState({
     email: actionData?.fields?.email || "",
     password: actionData?.fields?.password || "",

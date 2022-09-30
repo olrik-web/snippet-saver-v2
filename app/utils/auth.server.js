@@ -1,11 +1,11 @@
 import { json, redirect, createCookieSessionStorage } from "@remix-run/node";
-import { createUser } from "./user.server";
+import { comparePassword, createUser } from "./user.server";
 import connectDb from "~/db/connectDb.server";
 
-// The secret is used as an extra layer of security in the cookie-based session
+// The secret is used as an extra layer of security in the cookie-based session.
 const { SECRET } = process.env;
 
-// Starting the cookie-based session
+// Creating a cookie session storage.
 const storage = createCookieSessionStorage({
   cookie: {
     name: "snipelephant-session",
@@ -18,8 +18,13 @@ const storage = createCookieSessionStorage({
   },
 });
 
-// This function is called when the user clicks signs up. A user document should be created and a cookie stored.
+/*
+ * This function is called when the user clicks sign up.
+ * It should check if a user with the same email already exists and if not create a new user.
+ * It should also create a session for the user and redirect them to /snippets.
+ */
 export async function register({ email, password, firstName, lastName }) {
+  // Connecting to the database
   const db = await connectDb();
 
   // Checking if a user with the same email exist
@@ -27,38 +32,36 @@ export async function register({ email, password, firstName, lastName }) {
     email: email,
   });
 
+  // If a user with the same email exists we return an error message and a status code of 400 (Bad Request).
   if (userExists) {
-    return json(
-      { error: "User already exists with that email" },
-      { status: 400 }
-    );
+    return json({ error: "User already exists with that email", status: 400 });
   }
 
   // Creating a user document in the database
   const newUser = await createUser({ email, password, firstName, lastName });
 
-  // Checking if we created the user
+  // If the user document is not created we return an error message and a status code of 400.
   if (!newUser) {
-    return json(
-      {
-        error: "Something went wrong trying to create a new user.",
-        fields: { email: email, password: password },
-        status: 400 
-      },
-    );
+    return json({
+      error: "Something went wrong trying to create a new user.",
+      fields: { email: email, password: password },
+      status: 400,
+    });
   }
 
-  // Getting the newly created users ID
+  // Getting the newly created user's ID.
   const user = await db.models.User.findOne({ email: email }, { _id: 1 });
-  // Creating a session with user id and redirect to /snippets. We convert the OjbectId to a JSON string.
+  // Creating a session with user id and redirect to /snippets. We convert the ObjectId to a JSON string.
   return createUserSession(JSON.stringify(user._id), "/snippets");
 }
 
-// Function to create a session
+// This function creates a session for the user and redirects them to a page.
 export async function createUserSession(userId, redirectTo) {
-  // 
+  // Getting the session.
   const session = await storage.getSession();
+  // Setting the user id in the session.
   session.set("userId", userId);
+  // Committing the session and returning a redirect response with the cookie session.
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),
@@ -66,35 +69,39 @@ export async function createUserSession(userId, redirectTo) {
   });
 }
 
-// Getting the user that is currently logged in from the database
+// Getting the user that is currently logged in from the database.
 export async function getUser(request) {
   const db = await connectDb();
 
-  // Getting the user id
+  // Getting the user id from the cookie session.
   const userId = await getUserId(request);
 
-  if (typeof userId !== "string") {
-    return null;
-  }
-  console.log("Trying to find user with id: " + userId);
-  // Getting user info
+  // If the user id is not found we return null.
+  if (!userId) return null;
+
   try {
+    // Getting the user from the database using the user id.
     const user = await db.models.User.findById({ _id: userId });
     return user;
   } catch {
-    // Call logout function if a user is not found
-    throw logout(request);
+    return json({
+      error: "No user found with that id.",
+      status: 400,
+    });
   }
 }
 
-// This function gets a user id from the cookie session
+// This function gets a user id from the cookie session.
 async function getUserId(request) {
+  // Getting the cookie session from the request headers.
   const session = await getUserSession(request);
 
   // Parsing the JSON into an object
   const userId = session.get("userId");
 
-  if (!userId || typeof userId !== "string") return null;
+  // If the user id is not found we return null.
+  if (!userId) return null;
+
   // We parse the user id to remove quotation marks
   return JSON.parse(userId);
 }
@@ -104,13 +111,51 @@ function getUserSession(request) {
   return storage.getSession(request.headers.get("Cookie"));
 }
 
-// This function is used to destroy the cookie session and redirect the user to the login page
-// TODO: Call this function using a log out button
-export async function logout(request) {
+// This function is used to destroy the cookie session and redirect the user to the login page.
+export async function logOut(request) {
+  console.log("Logging out");
   const session = await getUserSession(request);
   return redirect("/login", {
     headers: {
       "Set-Cookie": await storage.destroySession(session),
     },
   });
+}
+
+/*
+ * This function is called when the user clicks login.
+ * It should check if a user with the same email exists and if the password is correct.
+ * It should also create a session for the user and redirect them to /snippets.
+ */
+export async function logIn({ email, password }) {
+  const db = await connectDb();
+
+  // Checking if a user with the same email exist
+  const userExists = await db.models.User.findOne({
+    email: email,
+  });
+
+  // If a user with the same email does not exist we return an error message and a status code of 400 (Bad Request).
+  if (!userExists) {
+    return json({
+      error: "User does not exist with that email",
+      fields: { email: email, password: password },
+      status: 400,
+    });
+  }
+
+  // Checking if the password is correct
+  const isPasswordCorrect = await comparePassword(password, userExists.password);
+
+  // If the password is not correct we return an error message and a status code of 400.
+  if (!isPasswordCorrect) {
+    return json({
+      error: "Password is incorrect",
+      fields: { email: email, password: password },
+      status: 400,
+    });
+  }
+
+  // Creating a session with user id and redirect to /snippets. We convert the ObjectId to a JSON string.
+  return createUserSession(JSON.stringify(userExists._id), "/snippets");
 }

@@ -46,6 +46,9 @@ const snippetSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  createdBy: {
+    type: String,
+  },
 });
 
 export const models = [

@@ -1,15 +1,23 @@
 import bcrypt from "bcryptjs";
 import connectDb from "~/db/connectDb.server";
 
-// This function creates a user document in the database
+/*
+ * This is one of the functions that is called when the user clicks sign up.
+ * It creates a user document in the database and returns the user document.
+ */
 export async function createUser({ email, password, firstName, lastName }) {
+  // Connecting to the database
   const db = await connectDb();
 
-  // Hashing the password using salt
+  /*
+   * Hashing the password with bcrypt and storing it in the database. The salt is used to make the hash unique.
+   * The higher the number the more secure the hash is. 10 is a good number to use.
+   * The higher the number the longer it takes to hash the password.
+   */
   const salt = bcrypt.genSaltSync(10);
   const hashPassword = bcrypt.hashSync(password, salt);
 
-  // Creating the user document
+  // Creating a user document in the database with the hashed password.
   const newUser = await db.models.User.create({
     email: email,
     password: hashPassword,
@@ -19,4 +27,9 @@ export async function createUser({ email, password, firstName, lastName }) {
     },
   });
   return newUser;
+}
+
+// This function compares the password with the hash stored in the database and returns true or false depending on if they match or not.
+export async function comparePassword(password, hash) {
+  return bcrypt.compareSync(password, hash);
 }
