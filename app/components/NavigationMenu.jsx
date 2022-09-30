@@ -8,7 +8,7 @@ export default function NavigationMenu() {
           <Link to="./create">New snippet</Link>
         </li>
         <li className="pt-8">
-          <Link to=".">All snippets</Link>
+          <Link to="./">All snippets</Link>
         </li>
       </ul>
       <ul>

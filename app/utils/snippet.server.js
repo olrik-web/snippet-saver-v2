@@ -8,7 +8,7 @@ export async function createSnippet({ title, desc }) {
   // Creating the snippet document
   const newSnippet = await db.models.Snippet.create({
     title: title,
-    password: desc,
+    desc: desc,
   });
   return newSnippet;
 }

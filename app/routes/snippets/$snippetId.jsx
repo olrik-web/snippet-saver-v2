@@ -1,6 +1,5 @@
 import { json } from "@remix-run/node";
-import { Link, useLoaderData, useParams } from "@remix-run/react";
-import data from "~/data.json";
+import { Link, useLoaderData } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server";
 
 export async function loader({ params, request }) {
