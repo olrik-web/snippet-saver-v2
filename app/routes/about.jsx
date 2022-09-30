@@ -1,4 +1,3 @@
-import { Link } from "@remix-run/react";
 import Navbar from "~/components/Navbar";
 
 export default function About() {

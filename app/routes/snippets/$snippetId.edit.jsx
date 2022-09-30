@@ -1,6 +1,5 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
-import data from "~/data.json";
 import connectDb from "~/db/connectDb.server";
 
 export async function action({ request }) {
@@ -8,6 +7,8 @@ export async function action({ request }) {
   console.log(body);
 
   return null;
+
+  // TODO: Fix this
 
   // const postSnippit = await editSnippet(body);
   // return redirect(`/snippet/${postSnippit.id}`);
