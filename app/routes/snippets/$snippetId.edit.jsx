@@ -1,6 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server";
+import { getUser } from "~/utils/auth.server";
 
 export async function action({ request }) {
   const body = await request.formData();
@@ -8,7 +9,7 @@ export async function action({ request }) {
 
   return null;
 
-  // TODO: Fix this
+  // TODO: Fix all of this :)
 
   // const postSnippit = await editSnippet(body);
   // return redirect(`/snippet/${postSnippit.id}`);
@@ -21,6 +22,13 @@ export async function action({ request }) {
 // }
 
 export async function loader({ params, request }) {
+  // Get the user that is currently logged in.
+  const user = await getUser(request);
+  // If the user is not logged in, redirect them to the login page.
+  if (!user) {
+    return redirect("/login");
+  }
+
   const db = await connectDb();
   const snippets = await db.models.Snippet.findById(params.snippetId);
   return json(snippets);
@@ -30,6 +38,8 @@ export default function Edit() {
   const snippet = useLoaderData();
 
   return (
+    // TODO: Use the snippet data to populate the form. Also, add a delete button.
+    // TODO: Use SnippetForm component here instead of the form below.
     <section>
       <article>
         <h1 className="text-3xl font-bold">Edit {snippet.title}</h1>

@@ -15,9 +15,11 @@ const userSchema = new Schema({
   profile: {
     firstName: {
       type: String,
+      required: [true, "Please provide a first name."],
     },
     lastName: {
       type: String,
+      required: [true, "Please provide a last name."],
     },
   },
   createdAt: {
@@ -47,10 +49,12 @@ const snippetSchema = new Schema({
     default: Date.now,
   },
   createdBy: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
 });
 
+// This is the array of models that will be exported to the database.
 export const models = [
   {
     name: "User",
