@@ -30,7 +30,7 @@ export async function loader({ params, request }) {
 
   console.log(params);
   const db = await connectDb();
-  const snippets = await db.models.Snippet.findById(params.snippetId);
+  const snippets = await db.models.snippets.findById(params.snippetId);
   
   return json(snippets);
 }

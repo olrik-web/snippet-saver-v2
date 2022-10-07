@@ -14,7 +14,7 @@ export async function loader({request}) {
 
   // TODO: Delete this and use the user from the session instead.
   const db = await connectDb();
-  const user = await db.models.User.find();
+  const user = await db.models.users.find();
   return json(user);
 }
 

@@ -33,7 +33,7 @@ export async function signup(email, password, passwordConfirmation, firstName, l
     lastName: { message: validateName(lastName) },
   };
 
-  if (errors.email || errors.password || errors.firstName || errors.lastName) {
+  if (errors.email.message || errors.password.message || errors.firstName.message || errors.lastName.message || errors.passwordConfirmation.message) {
     return json(errors);
   }
 
@@ -41,7 +41,7 @@ export async function signup(email, password, passwordConfirmation, firstName, l
   const db = await connectDb();
 
   // Checking if a user with the same email exist
-  const userExists = await db.models.User.findOne({
+  const userExists = await db.models.users.findOne({
     email: email,
   });
 
@@ -62,7 +62,7 @@ export async function signup(email, password, passwordConfirmation, firstName, l
   }
 
   // Getting the newly created user's ID.
-  const user = await db.models.User.findOne({ email: email }, { _id: 1 });
+  const user = await db.models.users.findOne({ email: email }, { _id: 1 });
   // Creating a session with user id and redirect to /snippets. We convert the ObjectId to a JSON string.
   return createUserSession(JSON.stringify(user._id), "/snippets");
 }
@@ -93,7 +93,7 @@ export async function getUser(request) {
 
   try {
     // Getting the user from the database using the user id.
-    const user = await db.models.User.findById({ _id: userId });
+    const user = await db.models.users.findById({ _id: userId });
     return user;
   } catch {
     return json({
@@ -141,7 +141,7 @@ export async function logOut(request) {
 export async function logIn(email, password) {
   const db = await connectDb();
   // Checking if a user with the same email exist
-  const userExists = await db.models.User.findOne({
+  const userExists = await db.models.users.findOne({
     email: email,
   });
 

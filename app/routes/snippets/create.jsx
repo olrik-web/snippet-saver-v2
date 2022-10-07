@@ -29,7 +29,7 @@ export async function loader({ request }) {
 
   // Display the user's snippet folders.
   const db = await connectDb();
-  const snippetFolders = await db.models.SnippetFolder.find({ createdBy: user._id });
+  const snippetFolders = await db.models.snippetFolders.find({ createdBy: user._id });
 
   return json(snippetFolders);
 }

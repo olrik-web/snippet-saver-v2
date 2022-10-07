@@ -37,8 +37,20 @@ const snippetSchema = new Schema({
     type: String,
     required: [true, "Please provide a title."],
   },
-  desc: {
+  description: {
     type: String,
+  },
+  language: {
+    type: String,
+    required: [true, "Please provide a language."],
+  },
+  code: {
+    type: String,
+    required: [true, "Please provide code."],
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
   },
   createdAt: {
     type: Date,
@@ -50,11 +62,11 @@ const snippetSchema = new Schema({
   },
   createdBy: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
   },
   snippetFolder: {
     type: Schema.Types.ObjectId,
-    ref: "SnippetFolder",
+    ref: "snippetFolders",
   },
 });
 
@@ -73,7 +85,7 @@ const snippetFolderSchema = new Schema({
   },
   createdBy: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: [true, "Please provide a user."],
   },
 });
@@ -81,18 +93,18 @@ const snippetFolderSchema = new Schema({
 // This is the array of models that will be exported to the database.
 export const models = [
   {
-    name: "User",
+    name: "users",
     schema: userSchema,
-    collection: "User",
+    collection: "users",
   },
   {
-    name: "Snippet",
+    name: "snippets",
     schema: snippetSchema,
-    collection: "Snippet",
+    collection: "snippets",
   },
   {
-    name: "SnippetFolder",
+    name: "snippetFolders",
     schema: snippetFolderSchema,
-    collection: "SnippetFolder",
+    collection: "snippetFolders",
   },
 ];

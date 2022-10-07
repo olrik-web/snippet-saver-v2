@@ -25,7 +25,7 @@ export async function createSnippet({ request, title, desc, snippetFolder }) {
   }
 
   // Creating the snippet document in the database
-  const newSnippet = await db.models.Snippet.create({
+  const newSnippet = await db.models.snippets.create({
     title: title,
     desc: desc,
     createdBy: user._id,
@@ -42,7 +42,7 @@ export async function getSnippet(id) {
   const db = await connectDb();
 
   // Getting the snippet document with the given id
-  const snippet = await db.models.Snippet.findById(id);
+  const snippet = await db.models.snippets.findById(id);
   return snippet;
 }
 
@@ -54,7 +54,7 @@ export async function getSnippets() {
   const db = await connectDb();
 
   // Getting all the snippet documents in the database
-  const snippets = await db.models.Snippet.find();
+  const snippets = await db.models.snippets.find();
   return snippets;
 }
 
@@ -66,7 +66,7 @@ export async function updateSnippet(id, { title, desc, snippetFolder }) {
   const db = await connectDb();
 
   // Getting the snippet document with the given id
-  const snippet = await db.models.Snippet.findById(id);
+  const snippet = await db.models.snippets.findById(id);
 
   // Updating the snippet document
   snippet.title = title;
@@ -86,7 +86,7 @@ export async function deleteSnippet(id) {
   const db = await connectDb();
 
   // Getting the snippet document with the given id
-  const snippet = await db.models.Snippet.findById(id);
+  const snippet = await db.models.snippets.findById(id);
 
   // Deleting the snippet document
   await snippet.delete();
@@ -110,7 +110,7 @@ export async function createSnippetFolder({ request, name }) {
   }
 
   // Creating the snippet folder document in the database
-  const newSnippetFolder = await db.models.SnippetFolder.create({
+  const newSnippetFolder = await db.models.snippetFolders.create({
     name,
     createdBy: user._id,
   });

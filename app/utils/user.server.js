@@ -19,7 +19,7 @@ export async function createUser({ email, password, firstName, lastName }) {
   const hashPassword = bcrypt.hashSync(password, salt);
 
   // Creating a user document in the database with the hashed password.
-  const newUser = await db.models.User.create({
+  const newUser = await db.models.users.create({
     email: email,
     password: hashPassword,
     profile: {

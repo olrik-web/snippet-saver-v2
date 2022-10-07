@@ -16,7 +16,7 @@ export async function loader({ request }) {
 
   const db = await connectDb();
 
-  const snippets = await db.models.Snippet.find({ createdBy: user._id });
+  const snippets = await db.models.snippets.find({ createdBy: user._id });
   return json({ snippets });
 }
 

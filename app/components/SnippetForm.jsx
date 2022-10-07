@@ -10,6 +10,17 @@ export default function SnippetForm({ errors, action, snippetFolders }) {
       <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">
         {errors?.title?.message}
       </div>
+      <label htmlFor="code">Code</label>
+      <textarea type="text" id="code" name="code" className="w-full p-2 rounded-xl my-2" />
+      <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">{errors?.code?.message}</div>
+
+      <label htmlFor="language">Programming language</label>
+      <select name="language" id="language" className="w-full p-2 rounded-xl my-2">
+        <option value="">Select a language</option>
+        <option value="javascript">JavaScript</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+      </select>
 
       <label htmlFor="desc">Description</label>
       <textarea type="text" id="desc" name="desc" className="w-full p-2 rounded-xl my-2" />
@@ -22,7 +33,9 @@ export default function SnippetForm({ errors, action, snippetFolders }) {
           </option>
         ))}
       </select>
-      <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">{errors?.snippetFolder?.message}</div>
+      <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">
+        {errors?.snippetFolder?.message}
+      </div>
       <div className="w-full text-center">
         <button
           type="submit"
