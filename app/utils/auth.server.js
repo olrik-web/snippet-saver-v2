@@ -25,7 +25,6 @@ const storage = createCookieSessionStorage({
  * It should also create a session for the user and redirect them to /snippets.
  */
 export async function signup(email, password, passwordConfirmation, firstName, lastName) {
-  console.log("Signing up user...");
   const errors = {
     email: { message: validateEmail(email) },
     password: { message: validatePasswords(password) },

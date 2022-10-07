@@ -1,9 +1,9 @@
 import { Form } from "@remix-run/react";
 
-// This component is used on the login and signup pages.
-export default function SnippetForm({ errors, action }) {
+// This component is used on the create and update snippet pages.
+export default function SnippetForm({ errors, action, snippetFolders }) {
   return (
-    //  The action prop will be "/login" or "/signup" depending on which page the LoginForm is used on.
+    // The action will be "/update" or "/create" depending on which page the SnippetForm is used on.
     <Form method="POST" action={action} className="rounded-2xl bg-gray-200 p-6 w-96">
       <label htmlFor="title">Title</label>
       <input type="text" id="title" name="title" className="w-full p-2 rounded-xl my-2" />
@@ -14,7 +14,15 @@ export default function SnippetForm({ errors, action }) {
       <label htmlFor="desc">Description</label>
       <textarea type="text" id="desc" name="desc" className="w-full p-2 rounded-xl my-2" />
       <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">{errors?.desc?.message}</div>
-      {/* The button text will be "Log In" or "Sign Up" depending on which page the LoginForm is used on. */}
+      <select name="snippetFolder" id="snippetFolder" className="w-full p-2 rounded-xl my-2">
+        <option value="">Select a folder</option>
+        {snippetFolders.map((snippetFolder) => (
+          <option key={snippetFolder._id} value={snippetFolder._id}>
+            {snippetFolder.name}
+          </option>
+        ))}
+      </select>
+      <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">{errors?.snippetFolder?.message}</div>
       <div className="w-full text-center">
         <button
           type="submit"

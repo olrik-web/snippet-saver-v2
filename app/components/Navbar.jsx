@@ -14,35 +14,23 @@ export default function Navbar() {
     setClicked(!clicked);
   }
   return (
-    <nav className="py-2 dark:bg-gray-900 xl:px-16">
-      <div className="container flex justify-between items-center mx-auto flex-wrap">
-        <Link to="/" className="flex items-center">
-          <img className="w-16 inline-block" src={logo} alt="Logo" />
-          <p className="text-xl font-semibold  dark:text-white">
-            Snip Elephant
-          </p>
-        </Link>
+    <nav className="fixed top-0 w-full py-2 bg-gray-900 xl:px-16">
+      <Link to="/" className="flex items-center absolute top-0 left-8">
+        <img className="w-16 inline-block" src={logo} alt="Logo" />
+        <p className="text-xl font-semibold  dark:text-white">Snip Elephant</p>
+      </Link>
+      <div className="container flex justify-end items-center mx-auto flex-wrap">
         <button
           type="button"
           onClick={handleClick}
           className="inline-flex items-center p-4 md:hidden text-white overflow-hidden whitespace-nowrap"
         >
           {clicked ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 352 512"
-              className="w-6 h-6"
-              fill="currentColor"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" className="w-6 h-6" fill="currentColor">
               <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" />
             </svg>
           ) : (
-            <svg
-              className="w-6 h-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
             </svg>
           )}
@@ -56,42 +44,22 @@ export default function Navbar() {
         >
           <ul className="flex flex-col p-4 mt-4 bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  isActive ? classActive : classNotActive
-                }
-              >
+              <NavLink to="/" className={({ isActive }) => (isActive ? classActive : classNotActive)}>
                 Home
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/about"
-                className={({ isActive }) =>
-                  isActive ? classActive : classNotActive
-                }
-              >
+              <NavLink to="/about" className={({ isActive }) => (isActive ? classActive : classNotActive)}>
                 About
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/snippets"
-                className={({ isActive }) =>
-                  isActive ? classActive : classNotActive
-                }
-              >
+              <NavLink to="/snippets/" className={({ isActive }) => (isActive ? classActive : classNotActive)}>
                 Snippets
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/profile"
-                className={({ isActive }) =>
-                  isActive ? classActive : classNotActive
-                }
-              >
+              <NavLink to="/profile" className={({ isActive }) => (isActive ? classActive : classNotActive)}>
                 Profile
               </NavLink>
             </li>

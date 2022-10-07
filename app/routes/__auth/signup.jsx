@@ -33,7 +33,7 @@ export default function SignUp() {
   // If the actionData is an error, pass it to the LoginForm component.
   return (
     <>
-      <h1 className="text-3xl font-bold text-center m-4">Sign Up</h1>
+      <h1 className="text-3xl font-bold text-center m-4 mt-24">Sign Up</h1>
       <div className="flex flex-col justify-center items-center py-8">
         <LoginForm errors={actionData} action="/signup" />
         <div className="text-center">

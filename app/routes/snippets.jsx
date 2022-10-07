@@ -1,9 +1,12 @@
 import { json, redirect } from "@remix-run/node";
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, useActionData, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 import Navbar from "~/components/Navbar";
 import NavigationMenu from "~/components/NavigationMenu";
 import connectDb from "~/db/connectDb.server";
 import { getUser } from "~/utils/auth.server";
+import { createSnippetFolder } from "~/utils/snippet.server";
+import SearchBar from "../components/SearchBar";
 
 export const loader = async ({ request }) => {
   // Get the user that is currently logged in.
@@ -13,33 +16,34 @@ export const loader = async ({ request }) => {
     return redirect("/login");
   }
 
-  // TODO: Only display the user's snippets (use the user's id) and not all snippets
-  // Display the user's snippets
+  // Display the user's snippet folders.
   const db = await connectDb();
-  const snippets = await db.models.Snippet.find();
+  const snippetFolders = await db.models.SnippetFolder.find({ createdBy: user._id });
 
-  return json(snippets);
+  return json(snippetFolders);
 };
 
+export async function action({ request }) {
+  const form = await request.formData();
+  const name = form.get("name");
+
+  try {
+    return await createSnippetFolder({ request, name });
+  } catch (error) {
+    return json(error);
+  }
+}
+
 export default function Snippets() {
-  const snippets = useLoaderData();
+  const snippetFolders = useLoaderData();
+  const actionData = useActionData();
+  
   return (
     <div>
-      <NavigationMenu />
+      <NavigationMenu actionData={actionData} snippetFolders={snippetFolders} />
       <Navbar />
-      <div className="flex ml-80 mr-4 my-4 ">
-        <div>
-          <h2 className="text-2xl font-bold text-center">All snippets</h2>
-          <ul>
-            {snippets.map((snippet) => (
-              <li key={snippet._id}>
-                <Link to={snippet._id.toString()} className="text-blue-600 underline">
-                  {snippet.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="flex flex-col ml-80 mr-8 my-4 mt-24">
+        
         <div className="mx-8">
           <Outlet />
         </div>
