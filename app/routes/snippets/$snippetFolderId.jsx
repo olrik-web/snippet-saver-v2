@@ -1,7 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
-import SnippetFolderCard from "~/components/SnippetCard";
+import SnippetCard from "~/components/SnippetCard";
 import connectDb from "~/db/connectDb.server";
 import { getUser } from "~/utils/auth.server";
 import SearchBar from "../../components/SearchBar";
@@ -28,7 +28,7 @@ export default function Details() {
   const filteredSnippets = data.snippets.filter((snippet) => {
     return (
       snippet.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      snippet.desc.toLowerCase().includes(searchTerm.toLowerCase())
+      snippet.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
   return (
@@ -36,14 +36,17 @@ export default function Details() {
     // TODO: Add a copy button that copies the code to the clipboard.
     <>
       <SearchBar setSearchTerm={setSearchTerm} />
-      <h1 className="text-3xl font-bold">{data.snippetFolder.name}</h1>
       <div className="flex flex-row gap-x-8">
-        <div>
+        <div className="w-1/2">
+          <h1 className="text-3xl font-bold">{data.snippetFolder.name}</h1>
+          <hr className="my-4" />
           {filteredSnippets.map((snippet) => (
-            <SnippetFolderCard key={snippet._id} snippet={snippet} />
+            <SnippetCard key={snippet._id} snippet={snippet} snippetFolder={data.snippetFolder} />
           ))}
         </div>
-        <Outlet />
+        <div className="w-1/2 h-full">
+          <Outlet />
+        </div>
       </div>
     </>
   );

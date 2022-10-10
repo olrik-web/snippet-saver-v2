@@ -16,11 +16,11 @@ export default function NavigationMenu({actionData, snippetFolders}) {
       <div className="flex flex-row justify-between items-center mx-8">
         <h2 className="text-2xl font-bold text-center text-gray-400">Collections</h2>
         {newCollection ? (
-          <button onClick={(e) => setNewCollection(false)} className="text-blue-500">
+          <button onClick={() => setNewCollection(false)} className="text-blue-500">
             <FiMinus className="w-6 h-6" />
           </button>
         ) : (
-          <button onClick={(e) => setNewCollection(true)} className=" text-blue-500">
+          <button onClick={() => setNewCollection(true)} className=" text-blue-500">
             <BsPlus className="w-6 h-6" />
           </button>
         )}
@@ -28,7 +28,7 @@ export default function NavigationMenu({actionData, snippetFolders}) {
       {newCollection && (
         <Form method="POST" action="/snippets" className="flex flex-col mx-8">
           <input
-            className="w-full p-2 my-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+            className="w-full p-2 my-2 border text-slate-900 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
             name="name"
             type="text"
             placeholder="Collection Name"

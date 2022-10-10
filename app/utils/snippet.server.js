@@ -8,7 +8,7 @@ import { getUser } from "./auth.server";
  * This function creates a snippet document in the database and returns the snippet document.
  * It is called when the user clicks the create snippet button.
  */
-export async function createSnippet({ request, title, desc, snippetFolder }) {
+export async function createSnippet({ request, title, description, snippetFolder, code, language }) {
   // TODO: add the user id to the snippet
   // Connecting to the database
   const db = await connectDb();
@@ -16,6 +16,10 @@ export async function createSnippet({ request, title, desc, snippetFolder }) {
   // Checking if the title is empty and returning an error message and a status code of 400 (Bad Request) if it is.
   if (!title) {
     return json({ title: { message: "Title cannot be empty.", status: 400 } });
+  }
+  // Checking if the language is empty and returning an error message and a status code of 400 (Bad Request) if it is.
+  if (!language) {
+    return json({ language: { message: "Language cannot be empty.", status: 400 } });
   }
 
   // Getting the user from the request and returning an error message and a status code of 400 (Bad Request) if the user is not found.
@@ -27,7 +31,9 @@ export async function createSnippet({ request, title, desc, snippetFolder }) {
   // Creating the snippet document in the database
   const newSnippet = await db.models.snippets.create({
     title: title,
-    desc: desc,
+    description: description,
+    code: code,
+    language: language,
     createdBy: user._id,
     snippetFolder: snippetFolder,
   });
@@ -61,7 +67,7 @@ export async function getSnippets() {
 /*
  * This function updates the snippet document with the given id and returns the updated snippet document.
  */
-export async function updateSnippet(id, { title, desc, snippetFolder }) {
+export async function updateSnippet(id, { title, description, snippetFolder }) {
   // Connecting to the database
   const db = await connectDb();
 
@@ -70,7 +76,7 @@ export async function updateSnippet(id, { title, desc, snippetFolder }) {
 
   // Updating the snippet document
   snippet.title = title;
-  snippet.desc = desc;
+  snippet.description = description;
   snippet.snippetFolder = snippetFolder;
 
   // Saving the updated snippet document

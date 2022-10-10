@@ -1,6 +1,6 @@
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import SnippetFolderCard from "~/components/SnippetCard";
+import SnippetCard from "~/components/SnippetCard";
 import connectDb from "~/db/connectDb.server";
 import { getUser } from "~/utils/auth.server";
 
@@ -27,7 +27,7 @@ export default function Details() {
     <>
       {/* <h1 className="text-3xl font-bold">{data.snippetFolder.name}</h1> */}
       {data.snippets.map((snippet) => (
-        <SnippetFolderCard key={snippet._id} snippet={snippet} />
+        <SnippetCard key={snippet._id} snippet={snippet} />
       ))}
     </>
   );

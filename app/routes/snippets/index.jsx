@@ -1,7 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 import { getUser } from "~/utils/auth.server";
 import connectDb from "~/db/connectDb.server";
-import { Outlet, useLoaderData, useParams } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import SnippetCard from "../../components/SnippetCard";
 import SearchBar from "../../components/SearchBar";
 import { useState } from "react";
@@ -17,6 +17,7 @@ export async function loader({ request }) {
   const db = await connectDb();
 
   const snippets = await db.models.snippets.find({ createdBy: user._id });
+  // TODO: Get the snippet folders.
   return json({ snippets });
 }
 
@@ -28,7 +29,7 @@ export default function SnippetIndex() {
   const filteredSnippets = data.snippets.filter((snippet) => {
     return (
       snippet.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      snippet.desc.toLowerCase().includes(searchTerm.toLowerCase())
+      snippet.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
   
@@ -38,12 +39,9 @@ export default function SnippetIndex() {
       <h1 className="text-3xl font-bold">All Snippets</h1>
       <hr className="my-4" />
 
-      
-
       {filteredSnippets.map((snippet) => (
-        <SnippetCard key={snippet._id} snippet={snippet}/>
+        <SnippetCard key={snippet._id} snippet={snippet} snippetFolder={data.snippetFolder} />
       ))}
-      
     </div>
   );
 }

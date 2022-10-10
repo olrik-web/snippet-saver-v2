@@ -1,10 +1,12 @@
-import { Form } from "@remix-run/react";
+import { Form, useParams } from "@remix-run/react";
 
 // This component is used on the create and update snippet pages.
 export default function SnippetForm({ errors, action, snippetFolders }) {
+  const params = useParams();
+
   return (
     // The action will be "/update" or "/create" depending on which page the SnippetForm is used on.
-    <Form method="POST" action={action} className="rounded-2xl bg-gray-200 p-6 w-96">
+    <Form method="POST" action={action} className="rounded-2xl bg-gray-200 p-6">
       <label htmlFor="title">Title</label>
       <input type="text" id="title" name="title" className="w-full p-2 rounded-xl my-2" />
       <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">
@@ -22,10 +24,18 @@ export default function SnippetForm({ errors, action, snippetFolders }) {
         <option value="css">CSS</option>
       </select>
 
-      <label htmlFor="desc">Description</label>
-      <textarea type="text" id="desc" name="desc" className="w-full p-2 rounded-xl my-2" />
-      <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">{errors?.desc?.message}</div>
-      <select name="snippetFolder" id="snippetFolder" className="w-full p-2 rounded-xl my-2">
+      <label htmlFor="description">Description</label>
+      <textarea type="text" id="description" name="description" className="w-full p-2 rounded-xl my-2" />
+      <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">
+        {errors?.description?.message}
+      </div>
+      <label htmlFor="snippetFolder">Snippet folder</label>
+      <select
+        name="snippetFolder"
+        id="snippetFolder"
+        className="w-full p-2 rounded-xl my-2"
+        defaultValue={params.snippetFolderId}
+      >
         <option value="">Select a folder</option>
         {snippetFolders.map((snippetFolder) => (
           <option key={snippetFolder._id} value={snippetFolder._id}>

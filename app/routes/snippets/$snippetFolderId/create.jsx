@@ -4,16 +4,20 @@ import SnippetForm from "~/components/SnippetForm";
 import connectDb from "~/db/connectDb.server";
 import { getUser } from "~/utils/auth.server";
 import { createSnippet } from "~/utils/snippet.server";
-import SearchBar from "../../components/SearchBar";
+import SearchBar from "../../../components/SearchBar";
 
 export async function action({ request }) {
   const form = await request.formData();
   const title = form.get("title");
-  const desc = form.get("desc");
+  const description = form.get("description");
   const snippetFolder = form.get("snippetFolder");
 
+  const code = form.get("code");
+  const language = form.get("language");
+
+
   try {
-    return await createSnippet({ request, title, desc, snippetFolder });
+    return await createSnippet({ request, title, description, snippetFolder, code, language });
   } catch (error) {
     return json(error);
   }
@@ -40,10 +44,9 @@ export default function Create() {
 
   return (
     <div>
-      <SearchBar disabled={true} />
-      <h4 className="text-2xl font-bold text-center">New Snippet</h4>
+      <h4 className="text-3xl font-bold">New Snippet</h4>
       <hr className="my-4" />
-      <SnippetForm errors={actionData} action="/snippets/create" snippetFolders={snippetFolders} />
+      <SnippetForm errors={actionData} snippetFolders={snippetFolders} />
     </div>
   );
 }

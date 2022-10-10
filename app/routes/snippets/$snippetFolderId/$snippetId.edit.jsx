@@ -41,21 +41,24 @@ export default function Edit() {
   return (
     // TODO: Use the snippet data to populate the form. Also, add a delete button.
     // TODO: Use SnippetForm component here instead of the form below.
-    <section className="rounded-lg bg-slate-300 my-2 p-4">
-      <article>
-        <h1 className="text-3xl font-bold">Edit {snippet.title}</h1>
-        <Form method="put" action={`/snippets/${snippet.id}/edit`}>
-          <label>
-            <input name="title" type="text" defaultValue={snippet ? snippet.title : undefined} />
-          </label>
-          <label>
-            <textarea name="description" defaultValue={snippet ? snippet.desc : undefined}></textarea>
-          </label>
-          <button type="submit">Update</button>
-        </Form>
-        <code></code>
-        <Link to={`../${snippet._id}`}>Cancel</Link>
-      </article>
-    </section>
+    <>
+      <h1 className="text-3xl font-bold">Edit: {snippet.title}</h1>
+      <hr className="my-4" />
+      <section className="rounded-lg bg-slate-300 my-2 p-4">
+        <article>
+          <Form method="put">
+            <label>
+              <input name="title" type="text" defaultValue={snippet ? snippet.title : undefined} />
+            </label>
+            <label>
+              <textarea name="description" defaultValue={snippet ? snippet.description : undefined}></textarea>
+            </label>
+            <button type="submit">Update</button>
+          </Form>
+          <code></code>
+          <Link to={`../${snippet._id}`}>Cancel</Link>
+        </article>
+      </section>
+    </>
   );
 }
