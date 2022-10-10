@@ -54,7 +54,7 @@ export default function Navbar() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/snippets/" className={({ isActive }) => (isActive ? classActive : classNotActive)}>
+              <NavLink to="/snippets/all" className={({ isActive }) => (isActive ? classActive : classNotActive)}>
                 Snippets
               </NavLink>
             </li>

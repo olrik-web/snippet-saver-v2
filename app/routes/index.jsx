@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import Navbar from "~/components/Navbar";
+import Button from "../components/Button";
 import logo from "../images/dall-e-elephant.png";
 
 export default function Index() {
@@ -14,13 +15,14 @@ export default function Index() {
         </p>
         <p className="py-8">Get started for free</p>
         <span>
-          <button className="rounded-xl mt-2 bg-blue-600 outline outline-blue-600 px-3 py-2 text-white font-semibold transition duration-300 ease-in-out transform hover:bg-blue-400 hover:outline-blue-400 hover:-translate-y-1">
-            <Link to="/login">Log in</Link>
-          </button>
+          <Button path="login" primary={true}>
+            Log in
+          </Button>
+
           <span className="px-4">or</span>
-          <button className="rounded-xl mt-2 outline outline-blue-400 px-3 py-2 text-black font-semibold transition duration-300 ease-in-out transform hover:outline-blue-200 hover:-translate-y-1">
-            <Link to="/signup">Sign up</Link>
-          </button>
+          <Button path="signup">
+            Sign up
+          </Button>
         </span>
       </div>
     </div>

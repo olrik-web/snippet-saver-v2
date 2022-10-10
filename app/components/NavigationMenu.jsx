@@ -41,7 +41,7 @@ export default function NavigationMenu({actionData, snippetFolders}) {
       <ul>
         <li>
           <NavLink
-            to="./"
+            to="./all"
             className={({ isActive }) =>
               isActive
                 ? classActive + " text-lg font-bold text-center"

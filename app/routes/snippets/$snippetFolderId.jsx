@@ -15,9 +15,17 @@ export async function loader({ params, request }) {
   }
 
   const db = await connectDb();
-  const snippets = await db.models.snippets.find({ snippetFolder: params.snippetFolderId });
-  const snippetFolder = await db.models.snippetFolders.findById(params.snippetFolderId);
-  return json({ snippets, snippetFolder });
+  if (params.snippetFolderId === "all") {
+    // Display all of the user's snippets.
+    const snippets = await db.models.snippets.find({ createdBy: user._id });
+
+    return json({snippets});
+  } else {
+    // Display the user's snippets in the specified snippet folder.
+    const snippets = await db.models.snippets.find({ snippetFolder: params.snippetFolderId });
+    const snippetFolder = await db.models.snippetFolders.findById(params.snippetFolderId);
+    return json({ snippets, snippetFolder });
+  }
 }
 
 export default function Details() {
@@ -38,10 +46,10 @@ export default function Details() {
       <SearchBar setSearchTerm={setSearchTerm} />
       <div className="flex flex-row gap-x-8">
         <div className="w-1/2">
-          <h1 className="text-3xl font-bold">{data.snippetFolder.name}</h1>
+          <h1 className="text-3xl font-bold">{data.snippetFolder?.name ? data.snippetFolder?.name : "All Snippets"}</h1>
           <hr className="my-4" />
           {filteredSnippets.map((snippet) => (
-            <SnippetCard key={snippet._id} snippet={snippet} snippetFolder={data.snippetFolder} />
+            <SnippetCard key={snippet._id} snippet={snippet} snippetFolder={data?.snippetFolder} />
           ))}
         </div>
         <div className="w-1/2 h-full">

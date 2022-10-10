@@ -1,13 +1,11 @@
-import { NavLink, useParams } from "@remix-run/react";
+import { NavLink } from "@remix-run/react";
 import { BsPlusCircleFill } from "react-icons/bs";
 
-export default function SearchBar({setSearchTerm, disabled}) {
-
-  const classActive = "block p-3 rounded-lg text-lg font-bold text-center text-white bg-blue-700";
+export default function SearchBar({ setSearchTerm, disabled }) {
+  const classActive =
+    "block p-3 rounded-lg text-lg font-bold text-center text-white bg-blue-700 transition duration-300 ease-in-out";
   const classNotActive =
-    "block p-3 rounded-lg text-lg font-bold text-center text-white bg-blue-500 hover:bg-blue-700 hover:text-white";
-
-  const params = useParams();
+    "block p-3 rounded-lg text-lg font-bold text-center text-white bg-blue-500 hover:bg-blue-700 hover:text-white transition duration-300 ease-in-out";
 
   return (
     <div className="flex flex-row items-center justify-center w-full">
@@ -19,10 +17,7 @@ export default function SearchBar({setSearchTerm, disabled}) {
         onChange={(e) => setSearchTerm(e.target.value)}
         disabled={disabled}
       />
-      <NavLink
-        to={`/snippets/${params.snippetFolderId}/create`}
-        className={({ isActive }) => (isActive ? classActive : classNotActive)}
-      >
+      <NavLink to="./create" className={({ isActive }) => (isActive ? classActive : classNotActive)}>
         <div className="flex flex-row items-center whitespace-nowrap gap-x-4">
           <p className="text-sm">New Snippet</p>
           <BsPlusCircleFill />

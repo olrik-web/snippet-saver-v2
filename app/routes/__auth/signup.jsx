@@ -2,6 +2,7 @@ import { redirect } from "@remix-run/node";
 import { Link, useActionData } from "@remix-run/react";
 import LoginForm from "~/components/LoginForm";
 import { getUser, signup } from "~/utils/auth.server";
+import Button from "../../components/Button";
 
 export async function loader({ request }) {
   // If the user is already logged in, redirect them to the home page.
@@ -20,9 +21,7 @@ export default function SignUp() {
         <LoginForm errors={actionData} action="/signup" />
         <div className="text-center">
           <p className="px-4">or</p>
-          <button className="rounded-xl mt-2 outline outline-blue-400 px-6 py-2 text-black font-semibold transition duration-300 ease-in-out transform hover:outline-blue-200 hover:-translate-y-1">
-            <Link to="/login">Log in</Link>
-          </button>
+          <Button path="/login">Log in</Button>
         </div>
       </div>
     </>
