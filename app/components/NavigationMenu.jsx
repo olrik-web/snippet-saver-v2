@@ -2,6 +2,7 @@ import { Form, NavLink } from "@remix-run/react";
 import { useState } from "react";
 import { BsPlus } from "react-icons/bs";
 import { FiMinus } from "react-icons/fi";
+import FormField from "./FormField";
 import SnippetFolderCard from "./SnippetFolderCard";
 
 export default function NavigationMenu({actionData, snippetFolders}) {
@@ -27,15 +28,7 @@ export default function NavigationMenu({actionData, snippetFolders}) {
       </div>
       {newCollection && (
         <Form method="POST" action="/snippets" className="flex flex-col mx-8">
-          <input
-            className="w-full p-2 my-2 border text-slate-900 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
-            name="name"
-            type="text"
-            placeholder="Collection Name"
-          />
-          <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">
-            {actionData?.name?.message}
-          </div>
+          <FormField label="Name" name="name" type="text" errors={actionData?.errors?.name} element="input" />
           <button
             type="submit"
             className="w-full p-2 my-2 text-white bg-blue-500 rounded-lg shadow-sm focus:outline-none focus:bg-blue-600"

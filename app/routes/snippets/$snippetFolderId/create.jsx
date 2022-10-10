@@ -4,17 +4,14 @@ import SnippetForm from "~/components/SnippetForm";
 import connectDb from "~/db/connectDb.server";
 import { getUser } from "~/utils/auth.server";
 import { createSnippet } from "~/utils/snippet.server";
-import SearchBar from "../../../components/SearchBar";
 
 export async function action({ request }) {
   const form = await request.formData();
   const title = form.get("title");
   const description = form.get("description");
   const snippetFolder = form.get("snippetFolder");
-
   const code = form.get("code");
   const language = form.get("language");
-
 
   try {
     return await createSnippet({ request, title, description, snippetFolder, code, language });

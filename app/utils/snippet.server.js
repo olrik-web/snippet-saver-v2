@@ -9,6 +9,7 @@ import { getUser } from "./auth.server";
  * It is called when the user clicks the create snippet button.
  */
 export async function createSnippet({ request, title, description, snippetFolder, code, language }) {
+  console.log("createSnippet called");
   // TODO: add the user id to the snippet
   // Connecting to the database
   const db = await connectDb();
@@ -37,6 +38,7 @@ export async function createSnippet({ request, title, description, snippetFolder
     createdBy: user._id,
     snippetFolder: snippetFolder,
   });
+  console.log("newSnippet", newSnippet);
   return newSnippet;
 }
 
