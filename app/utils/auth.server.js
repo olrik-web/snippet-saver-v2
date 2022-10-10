@@ -33,7 +33,13 @@ export async function signup(email, password, passwordConfirmation, firstName, l
     lastName: { message: validateName(lastName) },
   };
 
-  if (errors.email.message || errors.password.message || errors.firstName.message || errors.lastName.message || errors.passwordConfirmation.message) {
+  if (
+    errors.email.message ||
+    errors.password.message ||
+    errors.firstName.message ||
+    errors.lastName.message ||
+    errors.passwordConfirmation.message
+  ) {
     return json(errors);
   }
 
@@ -93,7 +99,7 @@ export async function getUser(request) {
 
   try {
     // Getting the user from the database using the user id.
-    const user = await db.models.users.findById({ _id: userId });
+    const user = await db.models.users.findById(userId);
     return user;
   } catch {
     return json({
@@ -104,7 +110,7 @@ export async function getUser(request) {
 }
 
 // This function gets a user id from the cookie session.
-async function getUserId(request) {
+export async function getUserId(request) {
   // Getting the cookie session from the request headers.
   const session = await getUserSession(request);
 

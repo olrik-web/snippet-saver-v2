@@ -1,12 +1,13 @@
 import { redirect } from "@remix-run/node";
-import { Link, useActionData } from "@remix-run/react";
+import { useActionData } from "@remix-run/react";
 import LoginForm from "~/components/LoginForm";
-import { getUser, signup } from "~/utils/auth.server";
+import { signup } from "~/utils/auth.server";
 import Button from "../../components/Button";
+import { getUserId } from "../../utils/auth.server";
 
 export async function loader({ request }) {
   // If the user is already logged in, redirect them to the home page.
-  return (await getUser(request)) ? redirect("/profile") : null;
+  return (await getUserId(request)) ? redirect("/profile") : null;
 }
 
 export default function SignUp() {

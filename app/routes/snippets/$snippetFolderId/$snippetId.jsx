@@ -2,13 +2,13 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import SnippetCard from "~/components/SnippetCard";
 import connectDb from "~/db/connectDb.server";
-import { getUser } from "~/utils/auth.server";
+import { getUserId } from "~/utils/auth.server";
 
 export async function loader({ params, request }) {
   // Get the user that is currently logged in.
-  const user = await getUser(request);
+  const userId = await getUserId(request);
   // If the user is not logged in, redirect them to the login page.
-  if (!user) {
+  if (!userId) {
     return redirect("/login");
   }
 

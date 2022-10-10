@@ -1,6 +1,6 @@
 import { json } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server";
-import { getUser } from "./auth.server";
+import { getUserId } from "./auth.server";
 
 //TODO: CRUD functions for snippets go here.
 
@@ -24,8 +24,8 @@ export async function createSnippet({ request, title, description, snippetFolder
   }
 
   // Getting the user from the request and returning an error message and a status code of 400 (Bad Request) if the user is not found.
-  const user = await getUser(request);
-  if (!user) {
+  const userId = await getUserId(request);
+  if (!userId) {
     return json({ error: "User not found.", status: 400 });
   }
 
@@ -35,7 +35,7 @@ export async function createSnippet({ request, title, description, snippetFolder
     description: description,
     code: code,
     language: language,
-    createdBy: user._id,
+    createdBy: userId,
     snippetFolder: snippetFolder,
   });
   console.log("newSnippet", newSnippet);
@@ -108,8 +108,8 @@ export async function createSnippetFolder({ request, name }) {
   const db = await connectDb();
 
   // Getting the user from the request and returning an error message and a status code of 400 (Bad Request) if the user is not found.
-  const user = await getUser(request);
-  if (!user) {
+  const userId = await getUserId(request);
+  if (!userId) {
     return json({ error: "User not found.", status: 400 });
   }
 
@@ -120,7 +120,7 @@ export async function createSnippetFolder({ request, name }) {
   // Creating the snippet folder document in the database
   const newSnippetFolder = await db.models.snippetFolders.create({
     name,
-    createdBy: user._id,
+    createdBy: userId,
   });
   return newSnippetFolder;
 }

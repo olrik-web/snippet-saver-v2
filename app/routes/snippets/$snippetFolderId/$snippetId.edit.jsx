@@ -1,7 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server";
-import { getUser } from "~/utils/auth.server";
+import { getUserId } from "~/utils/auth.server";
 
 export async function action({ request }) {
   const body = await request.formData();
@@ -22,9 +22,9 @@ export async function action({ request }) {
 
 export async function loader({ params, request }) {
   // Get the user that is currently logged in.
-  const user = await getUser(request);
+  const userId = await getUserId(request);
   // If the user is not logged in, redirect them to the login page.
-  if (!user) {
+  if (!userId) {
     return redirect("/login");
   }
 

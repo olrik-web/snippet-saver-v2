@@ -2,20 +2,20 @@ import { json, redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import SnippetForm from "~/components/SnippetForm";
 import connectDb from "~/db/connectDb.server";
-import { getUser } from "~/utils/auth.server";
 import { createSnippet } from "~/utils/snippet.server";
+import { getUserId } from "../../../utils/auth.server";
 
 export async function loader({ request }) {
   // Get the user that is currently logged in.
-  const user = await getUser(request);
+  const userId = await getUserId(request);
   // If the user is not logged in, redirect them to the login page.
-  if (!user) {
+  if (!userId) {
     return redirect("/login");
   }
 
   // Display the user's snippet folders.
   const db = await connectDb();
-  const snippetFolders = await db.models.snippetFolders.find({ createdBy: user._id });
+  const snippetFolders = await db.models.snippetFolders.find({ createdBy: userId });
 
   return json(snippetFolders);
 }

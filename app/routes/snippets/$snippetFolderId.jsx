@@ -3,21 +3,21 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import SnippetCard from "~/components/SnippetCard";
 import connectDb from "~/db/connectDb.server";
-import { getUser } from "~/utils/auth.server";
 import SearchBar from "../../components/SearchBar";
+import { getUserId } from "../../utils/auth.server";
 
 export async function loader({ params, request }) {
   // Get the user that is currently logged in.
-  const user = await getUser(request);
+  const userId = await getUserId(request);
   // If the user is not logged in, redirect them to the login page.
-  if (!user) {
+  if (!userId) {
     return redirect("/login");
   }
 
   const db = await connectDb();
   if (params.snippetFolderId === "all") {
     // Display all of the user's snippets.
-    const snippets = await db.models.snippets.find({ createdBy: user._id });
+    const snippets = await db.models.snippets.find({ createdBy: userId });
 
     return json({snippets});
   } else {
