@@ -1,41 +1,55 @@
-import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { json, redirect } from "@remix-run/node";
+import { Outlet, useActionData, useLoaderData } from "@remix-run/react";
 import Navbar from "~/components/Navbar";
 import NavigationMenu from "~/components/NavigationMenu";
 import connectDb from "~/db/connectDb.server";
+import { createSnippetFolder } from "~/utils/snippet.server";
+import { getUserId } from "../utils/auth.server";
 
 export const loader = async ({ request }) => {
-  // TODO: Only display the user's snippets (use the user's id) and not all snippets
-  // Display the user's snippets
+  // Get the user that is currently logged in.
+  const userId = await getUserId(request);
+  // If the user is not logged in, redirect them to the login page.
+  if (!userId) {
+    return redirect("/login");
+  }
+
+  // Display the user's snippet folders.
   const db = await connectDb();
-  const snippets = await db.models.Snippet.find();
-  
-  return json(snippets);
+  const snippetFolders = await db.models.snippetFolders.find({ createdBy: userId });
+
+  return json(snippetFolders);
 };
 
 export default function Snippets() {
-  const snippets = useLoaderData();
+  const snippetFolders = useLoaderData();
+  const actionData = useActionData();
+
   return (
     <div>
-      <NavigationMenu />
+      <NavigationMenu actionData={actionData} snippetFolders={snippetFolders} />
       <Navbar />
-      <div className="flex ml-80 mr-4 my-4 ">
-        <div>
-          <h2 className="text-2xl">All snippets</h2>
-          <ul>
-            {snippets.map((snippet) => (
-              <li key={snippet._id}>
-                <Link to={snippet._id.toString()} className="text-blue-600 underline">
-                  {snippet.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="flex flex-col ml-80 mr-8 my-4 mt-24">
         <div className="mx-8">
           <Outlet />
         </div>
       </div>
+    </div>
+  );
+}
+
+export async function action({ request }) {
+  const form = await request.formData();
+  const name = form.get("name");
+
+  return await createSnippetFolder({ request, name });
+}
+
+export function ErrorBoundary({ error }) {
+  return (
+    <div className="text-red-500 text-center">
+      <h1 className="text-2xl font-bold">Error</h1>
+      <p>{error.message}</p>
     </div>
   );
 }

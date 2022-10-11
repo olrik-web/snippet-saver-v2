@@ -20,6 +20,7 @@ export function links() {
 }
 
 export default function App() {
+  // TODO: Move the navbar to the app component so it is visible on all pages.
   return (
     <html lang="en">
       <head>

@@ -1,7 +1,6 @@
-export default function SnippetIndex() {
-  return (
-    <div>
-      <h4>snippets index</h4>
-    </div>
-  );
-}
+import { redirect } from "@remix-run/node";
+
+
+export async function loader() {
+    return redirect("/snippets/all");
+    }

@@ -15,9 +15,11 @@ const userSchema = new Schema({
   profile: {
     firstName: {
       type: String,
+      required: [true, "Please provide a first name."],
     },
     lastName: {
       type: String,
+      required: [true, "Please provide a last name."],
     },
   },
   createdAt: {
@@ -35,8 +37,20 @@ const snippetSchema = new Schema({
     type: String,
     required: [true, "Please provide a title."],
   },
-  desc: {
+  description: {
     type: String,
+  },
+  language: {
+    type: String,
+    required: [true, "Please provide a language."],
+  },
+  code: {
+    type: String,
+    required: [true, "Please provide code."],
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
   },
   createdAt: {
     type: Date,
@@ -47,19 +61,50 @@ const snippetSchema = new Schema({
     default: Date.now,
   },
   createdBy: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "users",
+  },
+  snippetFolder: {
+    type: Schema.Types.ObjectId,
+    ref: "snippetFolders",
   },
 });
 
+const snippetFolderSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Please provide a name."],
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: "users",
+    required: [true, "Please provide a user."],
+  },
+});
+
+// This is the array of models that will be exported to the database.
 export const models = [
   {
-    name: "User",
+    name: "users",
     schema: userSchema,
-    collection: "User",
+    collection: "users",
   },
   {
-    name: "Snippet",
+    name: "snippets",
     schema: snippetSchema,
-    collection: "Snippet",
+    collection: "snippets",
+  },
+  {
+    name: "snippetFolders",
+    schema: snippetFolderSchema,
+    collection: "snippetFolders",
   },
 ];
