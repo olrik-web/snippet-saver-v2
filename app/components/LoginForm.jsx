@@ -17,6 +17,7 @@ export default function LoginForm({ errors, action }) {
             label="Confirm password"
             name="passwordConfirmation"
             type="password"
+            element="input"
             errors={errors?.passwordConfirmation}
           />
           <FormField label="First name" name="firstName" type="text" errors={errors?.firstName} element="input" />
@@ -25,7 +26,9 @@ export default function LoginForm({ errors, action }) {
       )}
       {/* The button text will be "Log In" or "Sign Up" depending on which page the LoginForm is used on. */}
       <div className="w-full text-center">
-        <Button type="submit" primary={true}>{action === "/login" ? "Log In" : "Sign Up"}</Button>
+        <Button type="submit" primary={true}>
+          {action === "/login" ? "Log In" : "Sign Up"}
+        </Button>
         {/* This error message will be displayed if something went really wrong.*/}
         <div className="text-xs font-semibold text-center tracking-wide text-red-500 w-full">{errors?.error}</div>
       </div>
