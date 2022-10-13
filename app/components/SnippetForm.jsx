@@ -1,29 +1,71 @@
 import { Form, useParams } from "@remix-run/react";
 import Button from "./Button";
 import FormField from "./FormField";
+import FormFieldCode from "./FormFieldCode";
+import * as languages from "react-syntax-highlighter/dist/cjs/languages/hljs";
+import { docco, atomOneDark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
+import { useState } from "react";
+
 
 // This component is used on the create and update snippet pages.
 export default function SnippetForm({ errors, action, snippetFolders }) {
   const params = useParams();
+  const [code, setCode] = useState("");
+  const [language, setLanguage] = useState("javascript");
+  const [darkMode, setDarkMode] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function handleCodeChange(e) {
+    setCode(e.target.value);
+    setCopied(false);
+  }
+  function handleLanguageChange(e) {
+    setLanguage(e.target.value);
+  }
 
   return (
     // The action will be "/update" or "/create" depending on which page the SnippetForm is used on.
     <Form method="POST" action={action} className="rounded-2xl bg-gray-200 p-6">
       <FormField label="Title" name="title" type="text" errors={errors?.title} element="input" />
       <FormField label="Description" name="description" type="text" errors={errors?.description} element="textarea" />
-      <FormField label="Code" name="code" type="text" errors={errors?.code} element="textarea" />
-      <FormField label="Language" name="language" type="text" errors={errors?.language} element="select">
+      <FormField
+        label="Language"
+        name="language"
+        type="text"
+        errors={errors?.language}
+        element="select"
+        defaultValue={language}
+        handleLanguageChange={handleLanguageChange}
+      >
         <option value="">Select a language</option>
-        <option value="javascript">JavaScript</option>
-        <option value="html">HTML</option>
-        <option value="css">CSS</option>
+        {Object.keys(languages).map((language) => (
+          <option key={language} value={language}>
+            {language}
+          </option>
+        ))}
       </FormField>
+      <FormFieldCode
+        label="Code"
+        name="code"
+        type="text"
+        errors={errors?.code}
+        element="textarea"
+        defaultValue={code}
+        language={language}
+        handleCodeChange={handleCodeChange}
+        setDarkMode={setDarkMode}
+        darkMode={darkMode}
+        theme={darkMode ? atomOneDark : docco}
+        copied={copied}
+        setCopied={setCopied}
+      />
       <FormField
         label="Snippet Folder"
         name="snippetFolder"
         type="text"
         errors={errors?.snippetFolder}
         element="select"
+        onChange={params.snippetFolderId}
         defaultValue={params.snippetFolderId}
       >
         <option value="">Select a folder</option>

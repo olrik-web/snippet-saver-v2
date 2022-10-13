@@ -1,6 +1,8 @@
 import { Link } from "@remix-run/react";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { docco } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 
 export default function SnippetCard({ snippet, snippetFolder }) {
   return (
@@ -24,7 +26,9 @@ export default function SnippetCard({ snippet, snippetFolder }) {
           <p className="text-xs text-slate-900">{snippet.language}</p>
           <p className="text-xs text-slate-900">{snippetFolder?.name}</p>
         </div>
-        <pre className="text-xs text-slate-900">{snippet.code}</pre>
+        <SyntaxHighlighter language={snippet.language} style={docco}>
+          {snippet.code}
+        </SyntaxHighlighter>
       </div>
     </div>
   );
