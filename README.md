@@ -1,6 +1,6 @@
 # Welcome to Snip Elephant
 
-- [Check out the running solution](https://awp-snippet-saver-q9p5.onrender.com/) (Please be patient if it appears to be stuck loading. I'm using a free plan, which goes on "standby" after a while. It should be ready within a few minutes)
+- [Check out the running solution](https://awp-snippet-saver-q9p5.onrender.com/) (Please be patient if it appears to be stuck loading. It is hosted using a free plan, which goes on "standby" after a while. It should be ready within a few minutes)
 - Create a new user or use the following:
 - Email: admin@admin.com
 - Password: snip123
