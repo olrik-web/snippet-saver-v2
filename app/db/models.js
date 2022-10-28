@@ -68,7 +68,6 @@ const snippetSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "snippetFolders",
   },
-
 });
 
 const snippetFolderSchema = new Schema({

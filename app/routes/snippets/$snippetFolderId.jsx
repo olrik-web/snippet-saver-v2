@@ -19,7 +19,7 @@ export async function loader({ params, request }) {
     // Display all of the user's snippets.
     const snippets = await db.models.snippets.find({ createdBy: userId });
 
-    return json({snippets});
+    return json({ snippets });
   } else {
     // Display the user's snippets in the specified snippet folder.
     const snippets = await db.models.snippets.find({ snippetFolder: params.snippetFolderId });
@@ -31,6 +31,10 @@ export async function loader({ params, request }) {
 export default function Details() {
   const data = useLoaderData();
   const [searchTerm, setSearchTerm] = useState("");
+  const [sort, setSort] = useState("date");
+
+  const activeSortClass = "text-white font-semibold py-2 px-4 bg-blue-500";
+  const sortClass = "text-gray-800 font-semibold py-2 px-4";
 
   // Filter the snippets based on the search term. Includes snippets that contain the search term in the title or description.
   const filteredSnippets = data.snippets.filter((snippet) => {
@@ -39,16 +43,37 @@ export default function Details() {
       snippet.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
+
+  // Sort the snippets based on the sort option.
+  const sortedSnippets = filteredSnippets.sort((a, b) => {
+    if (sort === "title") {
+      return a.title.localeCompare(b.title);
+    } else if (sort === "favorite") {
+      return b.favorite - a.favorite;
+    } else {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    }
+  });
+
   return (
-    // TODO: Add a delete button that deletes the snippet and redirects to the snippets page.
-    // TODO: Add a copy button that copies the code to the clipboard.
     <>
       <SearchBar setSearchTerm={setSearchTerm} />
       <div className="flex flex-row gap-x-8">
         <div className="w-1/2">
           <h1 className="text-3xl font-bold">{data.snippetFolder?.name ? data.snippetFolder?.name : "All Snippets"}</h1>
           <hr className="my-4" />
-          {filteredSnippets.map((snippet) => (
+          <div className="flex flex-col lg:flex-row bg-gray-200 rounded">
+            <button className={sort === "title" ? activeSortClass : sortClass} onClick={() => setSort("title")}>
+              Title
+            </button>
+            <button className={sort === "date" ? activeSortClass : sortClass} onClick={() => setSort("date")}>
+              Updated At
+            </button>
+            <button className={sort === "favorite" ? activeSortClass : sortClass} onClick={() => setSort("favorite")}>
+              Favorites
+            </button>
+          </div>
+          {sortedSnippets.map((snippet) => (
             <SnippetCard key={snippet._id} snippet={snippet} snippetFolder={data?.snippetFolder} />
           ))}
         </div>
