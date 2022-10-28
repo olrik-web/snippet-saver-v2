@@ -9,8 +9,6 @@ import { getUserId } from "./auth.server";
  * It is called when the user clicks the create snippet button.
  */
 export async function createSnippet({ request, title, description, snippetFolder, code, language }) {
-  console.log("createSnippet called");
-  // TODO: add the user id to the snippet
   // Connecting to the database
   const db = await connectDb();
 
@@ -38,7 +36,6 @@ export async function createSnippet({ request, title, description, snippetFolder
     createdBy: userId,
     snippetFolder: snippetFolder,
   });
-  console.log("newSnippet", newSnippet);
   return newSnippet;
 }
 
@@ -69,17 +66,19 @@ export async function getSnippets() {
 /*
  * This function updates the snippet document with the given id and returns the updated snippet document.
  */
-export async function updateSnippet(id, { title, description, snippetFolder }) {
+export async function updateSnippet( snippetId, title, description, snippetFolder , code, language) {
   // Connecting to the database
   const db = await connectDb();
 
   // Getting the snippet document with the given id
-  const snippet = await db.models.snippets.findById(id);
+  const snippet = await db.models.snippets.findById(snippetId);
 
   // Updating the snippet document
   snippet.title = title;
   snippet.description = description;
   snippet.snippetFolder = snippetFolder;
+  snippet.code = code;
+  snippet.language = language;
 
   // Saving the updated snippet document
   const updatedSnippet = await snippet.save();
@@ -94,10 +93,8 @@ export async function deleteSnippet(id) {
   const db = await connectDb();
 
   // Getting the snippet document with the given id
-  const snippet = await db.models.snippets.findById(id);
+  await db.models.snippets.findByIdAndDelete(id);
 
-  // Deleting the snippet document
-  await snippet.delete();
 }
 
 /*

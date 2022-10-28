@@ -1,24 +1,9 @@
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server";
 import { getUserId } from "~/utils/auth.server";
-
-export async function action({ request }) {
-  const body = await request.formData();
-
-  return null;
-
-  // TODO: Fix all of this :)
-
-  // const postSnippit = await editSnippet(body);
-  // return redirect(`/snippet/${postSnippit.id}`);
-  return redirect("snippets/1");
-}
-
-// async function editSnippet(body) {
-//   console.log(body);
-//   return null;
-// }
+import SnippetForm from "~/components/SnippetForm";
+import { updateSnippet } from "~/utils/snippet.server";
 
 export async function loader({ params, request }) {
   // Get the user that is currently logged in.
@@ -28,37 +13,44 @@ export async function loader({ params, request }) {
     return redirect("/login");
   }
 
-  console.log(params);
   const db = await connectDb();
-  const snippets = await db.models.snippets.findById(params.snippetId);
-  
-  return json(snippets);
+  const snippet = await db.models.snippets.findById(params.snippetId);
+  const snippetFolders = await db.models.snippetFolders.find({ createdBy: userId });
+
+  return json({ snippet, snippetFolders });
 }
 
 export default function Edit() {
-  const snippet = useLoaderData();
+  const loaderData = useLoaderData();
+  const actionData = useActionData();
 
   return (
     // TODO: Use the snippet data to populate the form. Also, add a delete button.
-    // TODO: Use SnippetForm component here instead of the form below.
-    <>
-      <h1 className="text-3xl font-bold">Edit: {snippet.title}</h1>
+    <div>
+      <h4 className="text-3xl font-bold">New Snippet</h4>
       <hr className="my-4" />
-      <section className="rounded-lg bg-slate-300 my-2 p-4">
-        <article>
-          <Form method="put">
-            <label>
-              <input name="title" type="text" defaultValue={snippet ? snippet.title : undefined} />
-            </label>
-            <label>
-              <textarea name="description" defaultValue={snippet ? snippet.description : undefined}></textarea>
-            </label>
-            <button type="submit">Update</button>
-          </Form>
-          <code></code>
-          <Link to={`../${snippet._id}`}>Cancel</Link>
-        </article>
-      </section>
-    </>
+      <SnippetForm errors={actionData} snippetFolders={loaderData.snippetFolders} snippet={loaderData.snippet} />
+    </div>
+  );
+}
+
+export async function action({ request, params }) {
+  const form = await request.formData();
+  const title = form.get("title");
+  const description = form.get("description");
+  const snippetFolder = form.get("snippetFolder");
+  const code = form.get("code");
+  const language = form.get("language");
+
+  // Update the snippet and return the response.
+  return await updateSnippet(params.snippetId, title, description, snippetFolder, code, language);
+}
+
+export function ErrorBoundary({ error }) {
+  return (
+    <div className="text-red-500 text-center">
+      <h1 className="text-2xl font-bold">Error</h1>
+      <p>{error.message}</p>
+    </div>
   );
 }

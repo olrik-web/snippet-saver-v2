@@ -13,7 +13,6 @@ export async function loader({ params, request }) {
   }
 
   const db = await connectDb();
-  console.log(params);
   const snippets = await db.models.snippets.find({ snippetFolder: params.snippetId });
   const snippetFolder = await db.models.snippetFolders.findById(params.snippetId);
   return json({ snippets, snippetFolder });
