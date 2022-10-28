@@ -1,22 +1,24 @@
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { BsLightbulb, BsLightbulbFill, BsDownload, BsFiles } from "react-icons/bs";
-import { useState } from "react";
 
 export default function SyntaxHighlighterField({ language, code, theme, darkMode, setDarkMode, copied, setCopied }) {
+  function copyToClipboard() {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    }
+  }
+
   return (
     <>
       <div className="flex flex-row justify-between my-2">
         <button type="button" onClick={() => setDarkMode(!darkMode)}>
           {darkMode ? <BsLightbulbFill /> : <BsLightbulb />}
         </button>
-        {/* Navigator.clipboard seems to be supported in many browsers, but not all: https://caniuse.com/?search=clipboard */}
-        <button
-          type="button"
-          onClick={() => {
-            navigator.clipboard.writeText(code);
-            setCopied(true);
-          }}
-        >
+        <button type="button" onClick={() => copyToClipboard()}>
           <div className="flex flex-row gap-x-2 items-center">
             {copied ? "Copied!" : "Copy"}
             <BsFiles />

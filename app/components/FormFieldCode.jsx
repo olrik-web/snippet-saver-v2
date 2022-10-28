@@ -24,6 +24,7 @@ export default function FormField({
         onChange={handleCodeChange}
         defaultValue={defaultValue}
         placeholder="Type your code here..."
+        rows={8}
       />
       {defaultValue && (
         <SyntaxHighlighterField

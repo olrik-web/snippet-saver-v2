@@ -4,16 +4,18 @@ import FormField from "./FormField";
 import FormFieldCode from "./FormFieldCode";
 import * as languages from "react-syntax-highlighter/dist/cjs/languages/hljs";
 import { docco, atomOneDark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 
 // This component is used on the create and update snippet pages.
-export default function SnippetForm({ errors, action, snippetFolders }) {
+export default function SnippetForm({ errors, action, snippetFolders, snippet }) {
   const params = useParams();
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [darkMode, setDarkMode] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [snippetTitle, setSnippetTitle] = useState("");
+  const [snippetDescription, setSnippetDescription] = useState("");
+  const [snippetFolder, setSnippetFolder] = useState("");
 
   function handleCodeChange(e) {
     setCode(e.target.value);
@@ -23,11 +25,21 @@ export default function SnippetForm({ errors, action, snippetFolders }) {
     setLanguage(e.target.value);
   }
 
+  useEffect(() => {
+    if (snippet) {
+      setSnippetTitle(snippet.title);
+      setSnippetDescription(snippet.description);
+      setSnippetFolder(snippet.snippetFolder);
+      setCode(snippet.code);
+      setLanguage(snippet.language);
+    }
+  }, [snippet]);
+
   return (
     // The action will be "/update" or "/create" depending on which page the SnippetForm is used on.
     <Form method="POST" action={action} className="rounded-2xl bg-gray-200 p-6">
-      <FormField label="Title" name="title" type="text" errors={errors?.title} element="input" />
-      <FormField label="Description" name="description" type="text" errors={errors?.description} element="textarea" />
+      <FormField label="Title" name="title" type="text" errors={errors?.title} element="input" defaultValue={snippetTitle} />
+      <FormField label="Description" name="description" type="text" errors={errors?.description} element="textarea" defaultValue={snippetDescription} />
       <FormField
         label="Language"
         name="language"
