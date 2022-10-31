@@ -24,7 +24,7 @@ It is a work in progress. Here I've listed some of the missing features, which I
 
 ## Development
 
-- [Remix Docs](https://remix.run/docs)
+Read the [Remix Docs](https://remix.run/docs) for more information on the Remix framework. 
 
 Clone the repository and add a ```.env``` file to your root directory. The file should include the following key/value pairs:
 ```
