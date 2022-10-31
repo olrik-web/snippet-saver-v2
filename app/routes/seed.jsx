@@ -1,0 +1,106 @@
+import { json } from "@remix-run/node";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import connectDb from "~/db/connectDb.server";
+import Navbar from "~/components/Navbar";
+import { getUserId } from "../utils/auth.server";
+
+export const loader = async ({ request }) => {
+  const userId = await getUserId(request);
+
+  if (!userId) {
+    return json({ error: "Not logged in" }, { status: 401 });
+  }
+
+  const db = await connectDb();
+  const snippets = await db.models.snippets.countDocuments();
+  const snippetFolders = await db.models.snippetFolders.countDocuments();
+
+  return json({ snippets, snippetFolders });
+};
+
+export default function Seed() {
+  const loaderData = useLoaderData();
+  const actionData = useActionData();
+
+  return (
+    <div>
+      <Navbar />
+      <div className="mt-24 text-center">
+        <h1 className="text-2xl font-bold">Seed</h1>
+        <div className="bg-gray-200 p-4 rounded mt-4">
+          {loaderData.error && <p>{loaderData.error}</p>}
+          <p>
+            Database has <span className="text-red-500 font-bold">{loaderData.snippets}</span> snippets and{" "}
+            <span className="text-red-500 font-bold">{loaderData.snippetFolders}</span> snippet folders.
+          </p>
+          <p className="mt-4"> Are you sure you want to delete the existing data and seed the database?</p>
+          <Form method="post" className="mt-4">
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+              Seed
+            </button>
+          </Form>
+          {actionData?.success && <p className="text-green-500">{actionData.success}</p>}
+          {actionData?.error && <p className="text-red-500">{actionData.error}</p>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export async function action({ request }) {
+  // Seed the database with some data.
+  try {
+    const db = await connectDb();
+    await db.models.snippets.deleteMany({});
+    await db.models.snippetFolders.deleteMany({});
+    const userId = await getUserId(request);
+
+    const folder1 = await db.models.snippetFolders.create({
+      name: "My Snippets",
+      createdBy: userId,
+    });
+    const folder2 = await db.models.snippetFolders.create({
+      name: "My Other Snippets",
+      createdBy: userId,
+    });
+    await db.models.snippets.create({
+      title: "My First Snippet",
+      description: "This is my first snippet",
+      language: "javascript",
+      code: "console.log('Hello World!')",
+      favorite: true,
+      createdBy: userId,
+      snippetFolder: folder1._id,
+    });
+    await db.models.snippets.create({
+      title: "My Second Snippet",
+      description: "This is my second snippet",
+      language: "javascript",
+      code: "console.log('Hello World!')",
+      favorite: false,
+      createdBy: userId,
+      snippetFolder: folder2._id,
+    });
+    await db.models.snippets.create({
+      title: "My Third Snippet",
+      description: "This is my third snippet",
+      language: "javascript",
+      code: "console.log('Hello World!')",
+      favorite: false,
+      createdBy: userId,
+      snippetFolder: folder2._id,
+    });
+    return json({ success: "Database seeded" });
+  } catch (error) {
+    return json({ error: error.message }, { status: 500 });
+  }
+}
+
+export function ErrorBoundary({ error }) {
+  return (
+    <div className="text-red-500 text-center">
+      <h1 className="text-2xl font-bold">Error</h1>
+      <p>{error.message}</p>
+    </div>
+  );
+}
