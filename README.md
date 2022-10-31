@@ -32,6 +32,15 @@ It is a work in progress. Here I've listed some of the missing features, which I
 
 - [Remix Docs](https://remix.run/docs)
 
+Clone the repository and add a ```.env``` file to your root directory. The file should include the following key/value pairs:
+```
+MONGODB_URL=mongodb+srv://<your username>:<your password>@cluster0.97ocrib.mongodb.net/<your database>
+```
+and 
+```
+SECRET=<your secret>
+```
+
 If you want to run the solution on your machine. Type the following in the terminal:
 
 To install the required dependencies
