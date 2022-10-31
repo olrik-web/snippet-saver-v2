@@ -5,6 +5,7 @@ import SnippetCard from "~/components/SnippetCard";
 import connectDb from "~/db/connectDb.server";
 import SearchBar from "../../components/SearchBar";
 import { getUserId } from "../../utils/auth.server";
+import SortButtons from "../../components/SortButtons";
 
 export async function loader({ params, request }) {
   // Get the user that is currently logged in.
@@ -32,9 +33,9 @@ export default function Details() {
   const data = useLoaderData();
   const [searchTerm, setSearchTerm] = useState("");
   const [sort, setSort] = useState("date");
-
-  const activeSortClass = "text-white font-semibold py-2 px-4 bg-blue-500";
-  const sortClass = "text-gray-800 font-semibold py-2 px-4";
+  const [sortOrderDescDate, setSortOrderDescDate] = useState(false);
+  const [sortOrderDescTitle, setSortOrderDescTitle] = useState(true);
+  const [sortOrderDescFavorite, setSortOrderDescFavorite] = useState(false);
 
   // Filter the snippets based on the search term. Includes snippets that contain the search term in the title or description.
   const filteredSnippets = data.snippets.filter((snippet) => {
@@ -47,11 +48,13 @@ export default function Details() {
   // Sort the snippets based on the sort option.
   const sortedSnippets = filteredSnippets.sort((a, b) => {
     if (sort === "title") {
-      return a.title.localeCompare(b.title);
+      return sortOrderDescTitle ? b.title.localeCompare(a.title) : a.title.localeCompare(b.title);
     } else if (sort === "favorite") {
-      return b.favorite - a.favorite;
+      return sortOrderDescFavorite ? b.favorite - a.favorite : a.favorite - b.favorite;
     } else {
-      return new Date(b.createdAt) - new Date(a.createdAt);
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return sortOrderDescDate ? dateA - dateB : dateB - dateA;
     }
   });
 
@@ -62,17 +65,16 @@ export default function Details() {
         <div className="w-1/2">
           <h1 className="text-3xl font-bold">{data.snippetFolder?.name ? data.snippetFolder?.name : "All Snippets"}</h1>
           <hr className="my-4" />
-          <div className="flex flex-col lg:flex-row bg-gray-200 rounded">
-            <button className={sort === "title" ? activeSortClass : sortClass} onClick={() => setSort("title")}>
-              Title
-            </button>
-            <button className={sort === "date" ? activeSortClass : sortClass} onClick={() => setSort("date")}>
-              Updated At
-            </button>
-            <button className={sort === "favorite" ? activeSortClass : sortClass} onClick={() => setSort("favorite")}>
-              Favorites
-            </button>
-          </div>
+          <SortButtons
+            sort={sort}
+            setSort={setSort}
+            sortOrderDescDate={sortOrderDescDate}
+            setSortOrderDescDate={setSortOrderDescDate}
+            sortOrderDescTitle={sortOrderDescTitle}
+            setSortOrderDescTitle={setSortOrderDescTitle}
+            sortOrderDescFavorite={sortOrderDescFavorite}
+            setSortOrderDescFavorite={setSortOrderDescFavorite}
+          />
           {sortedSnippets.map((snippet) => (
             <SnippetCard key={snippet._id} snippet={snippet} snippetFolder={data?.snippetFolder} />
           ))}

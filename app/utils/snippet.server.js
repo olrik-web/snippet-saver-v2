@@ -121,3 +121,18 @@ export async function createSnippetFolder({ request, name }) {
   });
   return newSnippetFolder;
 }
+
+// This function updates the snippet favorite field of the snippet document with the given id. 
+export async function updateSnippetFavorite(snippetId) {
+  // Connecting to the database
+  const db = await connectDb();
+
+  // Getting the snippet document with the given id
+  const snippet = await db.models.snippets.findById(snippetId);
+
+  // Updating the snippet favorite field
+  snippet.favorite = !snippet.favorite;
+
+  // Saving the updated snippet document
+  await snippet.save();
+}

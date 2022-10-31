@@ -13,21 +13,19 @@ export async function loader({ params, request }) {
   }
 
   const db = await connectDb();
-  const snippets = await db.models.snippets.find({ snippetFolder: params.snippetId });
-  const snippetFolder = await db.models.snippetFolders.findById(params.snippetId);
-  return json({ snippets, snippetFolder });
+  const snippet = await db.models.snippets.findById(params.snippetId);
+  return json(snippet);
 }
 
 export default function Details() {
-  const data = useLoaderData();
+  const snippet = useLoaderData();
   return (
     // TODO: Add a delete button that deletes the snippet and redirects to the snippets page.
     // TODO: Add a copy button that copies the code to the clipboard.
     <>
-      {/* <h1 className="text-3xl font-bold">{data.snippetFolder.name}</h1> */}
-      {data.snippets.map((snippet) => (
-        <SnippetCard key={snippet._id} snippet={snippet} />
-      ))}
+      <h1 className="text-3xl font-bold">{snippet.title}</h1>
+      <hr className="my-4" />
+      <SnippetCard key={snippet._id} snippet={snippet} details={true} />
     </>
   );
 }
