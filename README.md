@@ -12,18 +12,12 @@ Snip Elephant is a school assignment which is built using React, [Remix Framewor
 The purpose of Snip Elephant is too allow developers to save code snippets. The snippets are saved in folders to allow the user to organise their snippets for quick access. It is called Snip Elephant because an elephant has great memory and can remember your code snippets so you don't have to. 
 
 It is a work in progress. Here I've listed some of the missing features, which I'm working on:
-- Edit/delete collections and snippets
-- Use a syntax highlighter when creating a new code snippet
-- More programming languages options
+- Edit/delete collections
 - Edit/delete profile 
 - About page
 - Make it a progressive web app (installable, service worker, offline access, caching, push notifications)
-- Ability to favorite/star snippets for even quicker access
-- Ability to sort snippets by title, last updated date and favorites (it is posible to search and filter snippets but not sort)
-- Snippet details page
 - Dark Mode
 - Auto-save funcionality when creating/editing a snippet
-- Copy button for code snippet
 - Export code to HTML, PDF, plaintext, JSON ...?
 - Accept cookies popup
 - Several UI improvements
