@@ -9,11 +9,12 @@ export async function action({ request, params }) {
   if (!userId) {
     return redirect("/login");
   }
-  // Refresh the page. Maybe add Form?
+  // Delete the snippet and redirect to the snippets page.
   await deleteSnippet(params.snippetId);
   return redirect("/snippets/" + params.snippetFolderId);
 }
 
+// Catch any unexpected errors and display them to the user.
 export function ErrorBoundary({ error }) {
   return (
     <div className="text-red-500 text-center">

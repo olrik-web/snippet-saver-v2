@@ -43,6 +43,7 @@ export async function action({ request }) {
   return await signup(email, password, passwordConfirmation, firstName, lastName);
 }
 
+// Catch any unexpected errors and display them to the user.
 export function ErrorBoundary({ error }) {
   return (
     <div className="text-red-500 text-center">

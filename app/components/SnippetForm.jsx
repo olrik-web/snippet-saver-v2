@@ -15,7 +15,6 @@ export default function SnippetForm({ errors, action, snippetFolders, snippet })
   const [copied, setCopied] = useState(false);
   const [snippetTitle, setSnippetTitle] = useState("");
   const [snippetDescription, setSnippetDescription] = useState("");
-  const [snippetFolder, setSnippetFolder] = useState("");
 
   function handleCodeChange(e) {
     setCode(e.target.value);
@@ -29,7 +28,6 @@ export default function SnippetForm({ errors, action, snippetFolders, snippet })
     if (snippet) {
       setSnippetTitle(snippet.title);
       setSnippetDescription(snippet.description);
-      setSnippetFolder(snippet.snippetFolder);
       setCode(snippet.code);
       setLanguage(snippet.language);
     }

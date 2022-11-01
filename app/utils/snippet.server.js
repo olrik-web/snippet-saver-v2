@@ -2,8 +2,6 @@ import { json } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server";
 import { getUserId } from "./auth.server";
 
-//TODO: CRUD functions for snippets go here.
-
 /*
  * This function creates a snippet document in the database and returns the snippet document.
  * It is called when the user clicks the create snippet button.

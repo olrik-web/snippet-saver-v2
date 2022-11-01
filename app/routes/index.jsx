@@ -1,12 +1,9 @@
-import { Link } from "@remix-run/react";
-import Navbar from "~/components/Navbar";
 import Button from "../components/Button";
 import logo from "../images/dall-e-elephant.png";
 
 export default function Index() {
   return (
     <div>
-      <Navbar />
       <div className="flex flex-col items-center justify-center mt-24">
         <img className="w-52" src={logo} alt="Logo" />
         <h1 className="text-3xl font-bold p-4">Save and organize your code snippets in the cloud</h1>

@@ -1,3 +1,4 @@
+import Navbar from "./components/Navbar";
 import styles from "./styles/app.css";
 
 const {
@@ -20,7 +21,6 @@ export function links() {
 }
 
 export default function App() {
-  // TODO: Move the navbar to the app component so it is visible on all pages.
   return (
     <html lang="en">
       <head>
@@ -28,6 +28,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <Navbar />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

@@ -9,7 +9,6 @@ export async function createUser({ email, password, firstName, lastName }) {
   // Connecting to the database
   const db = await connectDb();
 
-  // TODO: If we don't use bcrypt during class, change this code to use something else. 
   /*
    * Hashing the password with bcrypt and storing it in the database. The salt is used to make the hash unique.
    * The higher the number the more secure the hash is but it will take longer to hash the password.

@@ -1,7 +1,6 @@
 import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server";
-import Navbar from "~/components/Navbar";
 import { getUserId } from "../utils/auth.server";
 
 export const loader = async ({ request }) => {
@@ -19,7 +18,6 @@ export default function Seed() {
 
   return (
     <div>
-      <Navbar />
       <div className="mt-24 text-center">
         <h1 className="text-2xl font-bold">Seed</h1>
         <div className="bg-gray-200 p-4 rounded mt-4">
@@ -111,6 +109,7 @@ export async function action({ request }) {
   }
 }
 
+// Catch any unexpected errors and display them to the user.
 export function ErrorBoundary({ error }) {
   return (
     <div className="text-red-500 text-center">

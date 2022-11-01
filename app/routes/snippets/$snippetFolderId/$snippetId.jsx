@@ -12,6 +12,7 @@ export async function loader({ params, request }) {
     return redirect("/login");
   }
 
+  // Find the snippet using the snippetId from the URL.
   const db = await connectDb();
   const snippet = await db.models.snippets.findById(params.snippetId);
   return json(snippet);
@@ -20,8 +21,6 @@ export async function loader({ params, request }) {
 export default function Details() {
   const snippet = useLoaderData();
   return (
-    // TODO: Add a delete button that deletes the snippet and redirects to the snippets page.
-    // TODO: Add a copy button that copies the code to the clipboard.
     <>
       <h1 className="text-3xl font-bold">{snippet.title}</h1>
       <hr className="my-4" />

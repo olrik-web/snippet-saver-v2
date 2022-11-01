@@ -1,6 +1,5 @@
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useActionData, useLoaderData } from "@remix-run/react";
-import Navbar from "~/components/Navbar";
 import NavigationMenu from "~/components/NavigationMenu";
 import connectDb from "~/db/connectDb.server";
 import { createSnippetFolder } from "~/utils/snippet.server";
@@ -28,7 +27,6 @@ export default function Snippets() {
   return (
     <div>
       <NavigationMenu actionData={actionData} snippetFolders={snippetFolders} />
-      <Navbar />
       <div className="flex flex-col ml-80 mr-8 my-4 mt-24">
         <div className="mx-8">
           <Outlet />

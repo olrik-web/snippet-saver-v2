@@ -13,6 +13,7 @@ export async function loader({ params, request }) {
     return redirect("/login");
   }
 
+  // Find the snippet that is being edited and return it with the snippetFolder.
   const db = await connectDb();
   const snippet = await db.models.snippets.findById(params.snippetId);
   const snippetFolders = await db.models.snippetFolders.find({ createdBy: userId });
@@ -25,7 +26,6 @@ export default function Edit() {
   const actionData = useActionData();
 
   return (
-    // TODO: Use the snippet data to populate the form. Also, add a delete button.
     <div>
       <h4 className="text-3xl font-bold">New Snippet</h4>
       <hr className="my-4" />
@@ -46,6 +46,7 @@ export async function action({ request, params }) {
   return await updateSnippet(params.snippetId, title, description, snippetFolder, code, language);
 }
 
+// Catch any unexpected errors and display them to the user.
 export function ErrorBoundary({ error }) {
   return (
     <div className="text-red-500 text-center">

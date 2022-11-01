@@ -1,6 +1,5 @@
 import { redirect } from "@remix-run/node";
 
-
 export async function loader() {
-    return redirect("/snippets/all");
-    }
+  return redirect("/snippets/all");
+}

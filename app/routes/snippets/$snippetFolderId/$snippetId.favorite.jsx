@@ -14,6 +14,7 @@ export async function action({ request, params }) {
   return redirect("/snippets/" + params.snippetFolderId);
 }
 
+// Catch any unexpected errors and display them to the user.
 export function ErrorBoundary({ error }) {
   return (
     <div className="text-red-500 text-center">

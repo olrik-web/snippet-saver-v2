@@ -40,6 +40,7 @@ export async function action({ request }) {
   return await logIn(email, password);
 }
 
+// Catch any unexpected errors and display them to the user.
 export function ErrorBoundary({ error }) {
   return (
     <div className="text-red-500 text-center">

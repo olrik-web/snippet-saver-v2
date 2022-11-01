@@ -1,6 +1,5 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import Navbar from "~/components/Navbar";
 import connectDb from "~/db/connectDb.server";
 import { getUserId, logOut } from "~/utils/auth.server";
 import Button from "~/components/Button";
@@ -13,6 +12,7 @@ export async function loader({ request }) {
     return redirect("/login");
   }
 
+  // Find the current user using the userId from the session.
   const db = await connectDb();
   const user = await db.models.users.findById(currentUser);
   return json(user);
@@ -28,7 +28,6 @@ export default function Profile() {
   const user = useLoaderData();
   return (
     <>
-      <Navbar />
       <h1 className="text-3xl font-bold text-center m-4 mt-24">Profile</h1>
       <div className="max-w-2xl mx-auto">
         <div className="bg-gray-200 p-4 rounded">
