@@ -5,7 +5,6 @@ import connectDb from "~/db/connectDb.server";
 import { createSnippetFolder } from "~/utils/snippet.server";
 import { getUserId } from "../utils/auth.server";
 
-// TODO: Remove this. Testing git command
 export const loader = async ({ request }) => {
   // Get the user that is currently logged in.
   const userId = await getUserId(request);
